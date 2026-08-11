@@ -221,7 +221,7 @@
       "main": [
         [
           {
-            "node": "Classify Sponsor History",
+            "node": "Resolve Company Identity",
             "type": "main",
             "index": 0
           }
@@ -281,7 +281,13 @@
     },
     "Parse MyVisaJobs Employer Result": {
       "main": [
-        []
+        [
+          {
+            "node": "Classify Sponsor History",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Classify Sponsor History": {
@@ -308,13 +314,7 @@
     },
     "Classify Job Sponsorship Language": {
       "main": [
-        [
-          {
-            "node": "Resolve Company Identity",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     }
   },
@@ -457,8 +457,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3008,
-        -352
+        2672,
+        -320
       ],
       "id": "280b4285-10d3-4f49-857f-daa4434d0869",
       "name": "Prepare Job Record",
@@ -526,8 +526,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3968,
-        -448
+        3632,
+        -416
       ],
       "id": "c43d4446-e4ec-47b1-a383-7e365aa9fc37",
       "name": "Prepare Sponsor Search"
@@ -540,8 +540,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        4240,
-        -400
+        3904,
+        -368
       ],
       "id": "77bcc9d5-12cf-4603-8b39-8e4b9512a360",
       "name": "Search MyVisaJobs Employer"
@@ -563,8 +563,8 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
-        1984,
-        0
+        1584,
+        -304
       ],
       "id": "ae60eebb-dc3f-48b8-bddc-6b43ea14f059",
       "name": "Resolve Company Identity"
@@ -582,8 +582,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        1936,
-        192
+        1536,
+        -112
       ],
       "id": "d42f06f1-2d00-4834-97ec-58ae138a9837",
       "name": "OpenAI Chat Model",
@@ -602,8 +602,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        2096,
-        192
+        1696,
+        -112
       ],
       "id": "5abad9d5-a20c-4730-8f32-c5c52d0b784d",
       "name": "Structured Output Parser"
@@ -671,8 +671,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        2608,
-        16
+        2208,
+        -288
       ],
       "id": "4ad968f4-7814-467c-8100-2c3507722f38",
       "name": "Route Company Identity"
@@ -850,8 +850,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2864,
-        64
+        2464,
+        -240
       ],
       "id": "d80895ba-587f-4ec8-baab-21f0f6f9ef26",
       "name": "Append row in sheet",
@@ -906,8 +906,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2400,
-        96
+        2000,
+        -208
       ],
       "id": "12730a61-ed60-40f3-adea-10ec3037428b",
       "name": "Build Resolved Job Record"
@@ -941,8 +941,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3216,
-        -352
+        2880,
+        -320
       ],
       "id": "2c70e4f2-ce40-4b38-b86f-043c5db62fce",
       "name": "Find Sponsor Entity Mapping",
@@ -961,8 +961,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3472,
-        -368
+        3136,
+        -336
       ],
       "id": "1220a4d2-1a7a-4865-8e0b-70fc8f38a809",
       "name": "Attach Sponsor Entity Mapping"
@@ -1005,8 +1005,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        3680,
-        -368
+        3344,
+        -336
       ],
       "id": "08f292df-abfa-4a53-bf61-9802bb2179c1",
       "name": "Route Sponsor Entity Mapping"
@@ -1178,8 +1178,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3888,
-        -272
+        3552,
+        -240
       ],
       "id": "30dfb21a-5f4a-4089-9128-fb60c5494410",
       "name": "Append row in sheet1",
@@ -1198,8 +1198,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4464,
-        -384
+        4128,
+        -352
       ],
       "id": "c4f285f7-99c6-490e-b30e-afbbcadf6bf9",
       "name": "Parse MyVisaJobs Employer Result"
@@ -1212,8 +1212,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1568,
-        -304
+        4336,
+        -352
       ],
       "id": "72872c8d-b9d5-46ef-a5f4-c2e8d5b68260",
       "name": "Classify Sponsor History"
@@ -1305,8 +1305,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        1808,
-        -304
+        4576,
+        -352
       ],
       "id": "3a674deb-2bb3-4a22-a1a0-f7e83f66588a",
       "name": "Sponsor Route History"
@@ -1319,8 +1319,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2160,
-        -288
+        4928,
+        -336
       ],
       "id": "bf67b771-3bc0-41c1-b724-b69e363e936d",
       "name": "Classify Job Sponsorship Language"
@@ -1347,6 +1347,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-08-10T19:44:49.131Z",
-  "versionId": "83f04e7c-3548-4f8c-9035-e149be014c72"
+  "updatedAt": "2026-08-11T18:45:43.499Z",
+  "versionId": "e8510386-48be-4140-ad02-47cdc1edf7ad"
 }
