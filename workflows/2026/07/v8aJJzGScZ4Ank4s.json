@@ -1,0 +1,1352 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Sponsor List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Parse HiringCafe Search Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Fetch Full Job Description",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge Job Metadata + Description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Sponsor Records": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Fetch Sponsor List": {
+      "main": [
+        [
+          {
+            "node": "Inspect HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Sponsor": {
+      "main": [
+        []
+      ]
+    },
+    "Prepare Job Record": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Find Sponsor Entity Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Full Job Description": {
+      "main": [
+        [
+          {
+            "node": "Merge Job Metadata + Description",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Inspect HTML": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sponsor Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Check Sponsor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Sponsor Search": {
+      "main": [
+        [
+          {
+            "node": "Search MyVisaJobs Employer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search MyVisaJobs Employer": {
+      "main": [
+        [
+          {
+            "node": "Parse MyVisaJobs Employer Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resolve Company Identity": {
+      "main": [
+        [
+          {
+            "node": "Build Resolved Job Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Resolve Company Identity",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Resolve Company Identity",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Company Identity": {
+      "main": [
+        [
+          {
+            "node": "Prepare Job Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse HiringCafe Search Results": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Job Metadata + Description": {
+      "main": [
+        [
+          {
+            "node": "Classify Sponsor History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Resolved Job Record": {
+      "main": [
+        [
+          {
+            "node": "Route Company Identity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Sponsor Entity Mapping": {
+      "main": [
+        [
+          {
+            "node": "Attach Sponsor Entity Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Sponsor Entity Mapping": {
+      "main": [
+        [
+          {
+            "node": "Route Sponsor Entity Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Sponsor Entity Mapping": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sponsor Search",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse MyVisaJobs Employer Result": {
+      "main": [
+        []
+      ]
+    },
+    "Classify Sponsor History": {
+      "main": [
+        [
+          {
+            "node": "Sponsor Route History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sponsor Route History": {
+      "main": [
+        [
+          {
+            "node": "Classify Job Sponsorship Language",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Job Sponsorship Language": {
+      "main": [
+        [
+          {
+            "node": "Resolve Company Identity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-07-13T15:24:31.911Z",
+  "id": "v8aJJzGScZ4Ank4s",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Almee's Job Search Automation",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7b2d9dec-f506-4ed2-af82-4d3d22c80871",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "28d214aa-fd3b-4135-b2a0-a3e795db2d5a",
+              "name": "name",
+              "value": "Almee",
+              "type": "string"
+            },
+            {
+              "id": "f17fbeab-3048-4a86-af56-aa77f1038b32",
+              "name": "city",
+              "value": "Long Beach",
+              "type": "string"
+            },
+            {
+              "id": "2ccd1250-94c5-428d-96e9-ab111dfd4649",
+              "name": "url",
+              "value": "https://hiring.cafe/?searchState=%7B%22dateFetchedPastNDays%22%3A2%2C%22departments%22%3A%5B%22Software+Development%22%5D%2C%22roleYoeRange%22%3A%5B0%2C4%5D%2C%22securityClearances%22%3A%5B%22None%22%5D%7D",
+              "type": "string"
+            },
+            {
+              "id": "27d35325-3cea-4952-b7d7-1aa7f945ba40",
+              "name": "sponsorListUrl",
+              "value": "https://www.myvisajobs.com/reports/h1b/",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "36a15bf8-b859-4890-a741-31c1dfb94060",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "c81f6c6d-cf75-4757-beef-33210bce628e",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "maxItems": 2
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        832,
+        0
+      ],
+      "id": "874d2f20-7cbc-4574-bbb1-956a96e9c399",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "jsCode": "const companies = $input.first().json.companies ?? [];\nconst lcaCounts = $input.first().json.lcaCounts ?? [];\n\nif (companies.length !== lcaCounts.length) {\n  throw new Error(\n    `Different array lengths: ${companies.length} companies and ${lcaCounts.length} LCA counts`\n  );\n}\n\nreturn companies.map((company, index) => ({\n  json: {\n    company,\n    lcaCount: Number(\n      String(lcaCounts[index] ?? '').replace(/,/g, '')\n    ),\n  },\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        480
+      ],
+      "id": "b2cd5e93-80ee-4bc5-992d-cbd41c88bcfd",
+      "name": "Prepare Sponsor Records",
+      "notes": "Prepare Sponsor Records"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Edit Fields').item.json.sponsorListUrl }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        544,
+        480
+      ],
+      "id": "35a171a8-8b03-419c-803a-1f6355913456",
+      "name": "Fetch Sponsor List",
+      "notes": "Fetch Sponsor List"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().map((item) => item.json);\n\n// Collect all prepared job records\nconst jobs = items.filter(\n  (item) => item.id && item.title && item.applyUrl\n);\n\n// Collect all sponsor records\nconst sponsors = items.filter(\n  (item) =>\n    item.company &&\n    typeof item.lcaCount === 'number' &&\n    !item.id\n);\n\nif (jobs.length === 0) {\n  throw new Error('No prepared job records were found');\n}\n\nif (sponsors.length === 0) {\n  throw new Error('No sponsor records were found');\n}\n\nfunction normalizeCompanyName(name) {\n  return String(name ?? '')\n    .toLowerCase()\n    .replace(\n      /\\b(incorporated|corporation|company|limited|llc|inc|corp|ltd|usa|us)\\b/g,\n      ''\n    )\n    .replace(/[^a-z0-9]/g, '')\n    .trim();\n}\n\nreturn jobs.map((job) => {\n  const normalizedCompany = normalizeCompanyName(job.company);\n\n  const matchedSponsor = sponsors.find((sponsor) => {\n    const normalizedSponsor = normalizeCompanyName(sponsor.company);\n\n    return (\n      normalizedCompany === normalizedSponsor ||\n      normalizedCompany.includes(normalizedSponsor) ||\n      normalizedSponsor.includes(normalizedCompany)\n    );\n  });\n\n  return {\n    json: {\n      ...job,\n      normalizedCompany,\n      hasSponsorHistory: Boolean(matchedSponsor),\n      matchedSponsorName: matchedSponsor?.company ?? null,\n      lcaCount: matchedSponsor?.lcaCount ?? 0,\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3472,
+        512
+      ],
+      "id": "d0141eb9-e790-47f7-b416-68822d6c0df7",
+      "name": "Check Sponsor",
+      "notes": "Check Sponsor"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const descriptionHtml =\n  $json.job?.job_information?.description ?? '';\n\n// Convert the HTML description into readable plain text\nconst descriptionText = descriptionHtml\n  .replace(/<br\\s*\\/?>/gi, '\\n')\n  .replace(/<\\/(p|li|div|h[1-6]|ul|ol)>/gi, '\\n')\n  .replace(/<li[^>]*>/gi, '- ')\n  .replace(/<[^>]+>/g, '')\n  .replace(/&nbsp;/g, ' ')\n  .replace(/&amp;/g, '&')\n  .replace(/&lt;/g, '<')\n  .replace(/&gt;/g, '>')\n  .replace(/&quot;/g, '\"')\n  .replace(/&#39;/g, \"'\")\n  .replace(/\\n[ \\t]+/g, '\\n')\n  .replace(/\\n{3,}/g, '\\n\\n')\n  .trim();\n\nconst resolvedCompany =\n  $json.company_identity?.recommendedCompanyName ?? '';\n\nreturn {\n  json: {\n    // Preserve EVERYTHING we've accumulated so far\n    ...$json,\n\n    // Normalized fields used by downstream nodes\n    title:\n      $json.job_information?.title ??\n      $json.v5_processed_job_data?.core_job_title ??\n      '',\n\n    company: resolvedCompany,\n\n    applyUrl: $json.apply_url ?? '',\n\n    requirementsSummary:\n      $json.v5_processed_job_data?.requirements_summary ?? '',\n\n    technicalTools:\n      $json.v5_processed_job_data?.technical_tools ?? [],\n\n    descriptionHtml,\n    descriptionText,\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3008,
+        -352
+      ],
+      "id": "280b4285-10d3-4f49-857f-daa4434d0869",
+      "name": "Prepare Job Record",
+      "notes": "Prepare Job Record"
+    },
+    {
+      "parameters": {
+        "url": "=https://hiring.cafe/api/job-description?id={{ $json.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1184,
+        80
+      ],
+      "id": "25508a04-5e32-4fd9-8dbd-8b12fda06aa2",
+      "name": "Fetch Full Job Description",
+      "notes": "Fetch Full Job Description"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "companies",
+              "cssSelector": "table.tbl-top tr:not(:first-child) td:nth-child(2) a",
+              "returnArray": true
+            },
+            {
+              "key": "lcaCounts",
+              "cssSelector": "table.tbl-top tr:not(:first-child) td:nth-child(3) a",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        912,
+        480
+      ],
+      "id": "54a89b92-5aa8-49a3-a6b1-8f1ae13a4822",
+      "name": "Inspect HTML"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3104,
+        496
+      ],
+      "id": "fd793270-a416-4737-b6e2-7a8b6b5f1025",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const sponsorEntityName = String(\n  $json.sponsor_entity_mapping?.['Verified Sponsor Entity Name'] ?? ''\n).trim();\n\nif (!sponsorEntityName) {\n  throw new Error('No verified sponsor entity available for sponsor search.');\n}\n\nreturn {\n  json: {\n    ...$json,\n    sponsorSearchTerm: sponsorEntityName,\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3968,
+        -448
+      ],
+      "id": "c43d4446-e4ec-47b1-a383-7e365aa9fc37",
+      "name": "Prepare Sponsor Search"
+    },
+    {
+      "parameters": {
+        "url": "=https://www.myvisajobs.com/employers/search.aspx?e={{ encodeURIComponent($json.sponsorSearchTerm) }}&jt=",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4240,
+        -400
+      ],
+      "id": "77bcc9d5-12cf-4603-8b39-8e4b9512a360",
+      "name": "Search MyVisaJobs Employer"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Determine the employer identity for this job posting.\n\nJob data:\n\n{{ JSON.stringify($json, null, 2) }}\n\nClassify how the recommended company name was obtained. Do not allow an inferred or unknown identity to bypass manual review.",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You resolve the employer identity associated with a job posting.\n\nYour purpose is to identify a trustworthy employer name that can eventually be searched on MyVisaJobs, while preventing unsupported company-name guesses from automatically entering the sponsorship workflow.\n\nUse only the job data and metadata supplied in the request. Do not use outside knowledge.\n\nYou must distinguish between:\n\n1. explicitCompanyName\nThe employer name that is explicitly written in the supplied job content.\n\nThis may come from:\n- the job description\n- an About Company section\n- an Equal Opportunity Employer statement\n- an employer disclosure\n- a privacy notice\n- a legal footer\n- other supplied job text that directly names the employer\n\nDo not infer, expand, normalize, or add legal suffixes to explicitCompanyName.\n\nIf the supplied job content only says \"HPR\", explicitCompanyName is \"HPR\" unless \"Hyannis Port Research\" is also explicitly written somewhere in the supplied content.\n\nIf no employer name is explicitly written in the supplied job content, return null.\n\n2. recommendedCompanyName\nThe company name you recommend using as the employer identity for the next stage of the workflow.\n\nThis may be the same as explicitCompanyName, may come directly from trusted structured metadata, or may be an inferred identity.\n\nDo not invent a company name.\n\n3. identityBasis\nReturn exactly one of these values:\n\nexplicit\ntrusted_metadata\ninferred\nunknown\n\n\nIDENTITY BASIS RULES\n\nexplicit\n\nUse \"explicit\" when recommendedCompanyName is directly supported by an employer name explicitly written in the supplied job content.\n\nWhen identityBasis is \"explicit\":\n- explicitCompanyName must not be null.\n- recommendedCompanyName should normally equal explicitCompanyName.\n- needsManualReview must be false unless supplied evidence conflicts in a meaningful way.\n\n\ntrusted_metadata\n\nUse \"trusted_metadata\" when a reliable structured field supplied with the job directly identifies the employer by name and that name does not require interpretation.\n\nExamples may include:\n- an enriched company-name field\n- a clear employer-name field from the job source\n- another structured field whose value directly represents the employer's name\n\nDo not treat the following as trusted metadata by themselves:\n- ATS slug\n- board token\n- domain\n- URL fragment\n- acronym expansion\n- job ID\n- object ID\n\nWhen identityBasis is \"trusted_metadata\":\n- explicitCompanyName may be null.\n- recommendedCompanyName should contain the directly supplied employer name.\n- needsManualReview must be false unless there is conflicting evidence.\n\n\ninferred\n\nUse \"inferred\" when recommendedCompanyName requires interpretation or transformation of the supplied evidence.\n\nExamples include:\n- expanding an abbreviation\n- interpreting an ATS slug or board token\n- interpreting a company domain\n- interpreting an apply URL\n- adding or removing words or legal suffixes\n- resolving a brand to a parent company\n- resolving a parent company to a subsidiary\n- determining an operating or legal entity\n- choosing between multiple plausible company identities\n- combining several clues to produce a company name that does not directly appear as such in a trusted source\n\nWhen identityBasis is \"inferred\":\n- recommendedCompanyName may contain the inferred name.\n- needsManualReview must always be true.\n- manualReviewReason must explain what was inferred and why human verification is required.\n\n\nunknown\n\nUse \"unknown\" when the supplied evidence is insufficient to recommend an employer identity.\n\nWhen identityBasis is \"unknown\":\n- recommendedCompanyName must be null.\n- needsManualReview must be true.\n- manualReviewReason must explain what information is missing or ambiguous.\n\n\nGENERAL RULES\n\n- Do not use outside knowledge.\n- Do not invent company names or legal suffixes.\n- Do not assume that a familiar brand name maps to a particular legal entity.\n- Do not mistake customers, investors, products, technologies, acquired companies, partners, or vendors for the employer.\n- A confidence score does not make an inferred identity trustworthy.\n- Confidence is an audit field only and must not determine whether the workflow proceeds automatically.\n- Evidence must refer only to information directly present in the supplied input.\n- Evidence should identify the specific field, phrase, domain, URL, slug, disclosure, or other clue used.\n- Do not claim that something \"matches company history\", \"is known as\", or use similar reasoning based on outside knowledge.\n- If explicit job content and trusted structured metadata materially conflict, do not automatically approve the identity. Use \"inferred\" if you can make a reasonable recommendation from the supplied evidence, otherwise use \"unknown\", and require manual review.\n- Set needsManualReview to false only for trustworthy \"explicit\" or \"trusted_metadata\" identities without meaningful conflicting evidence.\n- Set needsManualReview to true for every \"inferred\" or \"unknown\" identity."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1984,
+        0
+      ],
+      "id": "ae60eebb-dc3f-48b8-bddc-6b43ea14f059",
+      "name": "Resolve Company Identity"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1936,
+        192
+      ],
+      "id": "d42f06f1-2d00-4834-97ec-58ae138a9837",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "uTP8b8NME3EgoZlg",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"explicitCompanyName\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"recommendedCompanyName\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"identityBasis\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"explicit\",\n        \"trusted_metadata\",\n        \"inferred\",\n        \"unknown\"\n      ]\n    },\n    \"confidence\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 1\n    },\n    \"evidence\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"needsManualReview\": {\n      \"type\": \"boolean\"\n    },\n    \"manualReviewReason\": {\n      \"type\": [\"string\", \"null\"]\n    }\n  },\n  \"required\": [\n    \"sourceCompanyName\",\n    \"recommendedCompanyName\",\n    \"identityBasis\",\n    \"confidence\",\n    \"evidence\",\n    \"needsManualReview\",\n    \"manualReviewReason\"\n  ],\n  \"additionalProperties\": false\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2096,
+        192
+      ],
+      "id": "5abad9d5-a20c-4730-8f32-c5c52d0b784d",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "3f6b448c-75e4-40a7-892b-bde0d3ea4d8b",
+                    "leftValue": "={{ $json.company_identity.needsManualReview }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Automatic Lookup"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "0ce86ea7-b18c-4886-861f-9e1cefef909a",
+                    "leftValue": "={{ $json.company_identity.needsManualReview }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Manual Review"
+            }
+          ]
+        },
+        "options": {
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2608,
+        16
+      ],
+      "id": "4ad968f4-7814-467c-8100-2c3507722f38",
+      "name": "Route Company Identity"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 979464932,
+          "mode": "list",
+          "cachedResultName": "Manual Review Queue",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=979464932"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "Job ID": "={{ $('Limit').item.json.id }}",
+            "Job Title": "={{ $('Limit').item.json.job_information.title }}",
+            "Identity Basis": "={{ $json.output.identityBasis }}",
+            "Confidence": "={{ $json.output.confidence }}",
+            "Manual Review Reason": "={{ $json.output.manualReviewReason }}",
+            "Evidence": "={{ $json.output.evidence.join('\\n') }}",
+            "Apply URL": "={{ $('Limit').item.json.apply_url }}",
+            "Review Status": "Pending",
+            "Raw Source Company Name": "={{ $('Limit').item.json.enriched_company_data?.name ?? $('Limit').item.json.v5_processed_job_data?.company_name ?? $('Limit').item.json.company_name ?? '' }}",
+            "Explicit Company Name": "={{ $json.output.explicitCompanyName }}",
+            "AI Recommended Company Name": "={{ $json.output.recommendedCompanyName }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply URL",
+              "displayName": "Apply URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Raw Source Company Name",
+              "displayName": "Raw Source Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Explicit Company Name",
+              "displayName": "Explicit Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI Recommended Company Name",
+              "displayName": "AI Recommended Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Identity Basis",
+              "displayName": "Identity Basis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Evidence",
+              "displayName": "Evidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Manual Review Reason",
+              "displayName": "Manual Review Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Verified Company Name",
+              "displayName": "Verified Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Review Status",
+              "displayName": "Review Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2864,
+        64
+      ],
+      "id": "d80895ba-587f-4ec8-baab-21f0f6f9ef26",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $input.first().json.data;\n\nconst match = html.match(\n  /<script[^>]*id=\"__NEXT_DATA__\"[^>]*>([\\s\\S]*?)<\\/script>/\n);\n\nif (!match) {\n  throw new Error(\"__NEXT_DATA__ not found\");\n}\n\nconst nextData = JSON.parse(match[1]);\n\nconst jobs = nextData.props?.pageProps?.ssrHits;\n\nif (!Array.isArray(jobs)) {\n  throw new Error(\"Expected props.pageProps.ssrHits to be an array\");\n}\n\nreturn jobs.map((job) => ({\n  json: job,\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "18cb1ba6-bb14-4845-afec-3eb52e1a169d",
+      "name": "Parse HiringCafe Search Results"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "id",
+              "field2": "job.id"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1376,
+        -304
+      ],
+      "id": "34303582-a905-499f-910a-21daca023587",
+      "name": "Merge Job Metadata + Description"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const jobRecord = $('Merge Job Metadata + Description').item.json;\nconst companyIdentity = $json.output;\n\nreturn {\n  json: {\n    ...jobRecord,\n    company_identity: companyIdentity,\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        96
+      ],
+      "id": "12730a61-ed60-40f3-adea-10ec3037428b",
+      "name": "Build Resolved Job Record"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 466851572,
+          "mode": "list",
+          "cachedResultName": "Sponsor Entity Mappings",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=466851572"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Company Identity",
+              "lookupValue": "={{ $json.company }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3216,
+        -352
+      ],
+      "id": "2c70e4f2-ce40-4b38-b86f-043c5db62fce",
+      "name": "Find Sponsor Entity Mapping",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const jobs = $('Prepare Job Record').all().map(item => item.json);\n\n// Remove the empty {} produced by \"Always Output Data\"\nconst mappings = $input.all()\n  .map(item => item.json)\n  .filter(mapping => Object.keys(mapping).length > 0);\n\nfunction normalize(value) {\n  return String(value ?? '')\n    .trim()\n    .toLowerCase();\n}\n\n// Build reusable lookup by Company Identity\nconst mappingByCompany = new Map();\n\nfor (const mapping of mappings) {\n  const key = normalize(mapping['Company Identity']);\n\n  if (key) {\n    mappingByCompany.set(key, mapping);\n  }\n}\n\nreturn jobs.map(job => {\n  const mapping =\n    mappingByCompany.get(normalize(job.company)) ?? null;\n\n  return {\n    json: {\n      ...job,\n\n      sponsor_entity_mapping: mapping,\n\n      hasSponsorEntityMapping: Boolean(\n        mapping &&\n        mapping['Mapping Status'] === 'Verified' &&\n        mapping['Verified Sponsor Entity Name']\n      ),\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3472,
+        -368
+      ],
+      "id": "1220a4d2-1a7a-4865-8e0b-70fc8f38a809",
+      "name": "Attach Sponsor Entity Mapping"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.hasSponsorEntityMapping }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "ee36d26f-0053-44d6-9e5d-b959e89eddc8"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Verified Mapping"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        3680,
+        -368
+      ],
+      "id": "08f292df-abfa-4a53-bf61-9802bb2179c1",
+      "name": "Route Sponsor Entity Mapping"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1788003007,
+          "mode": "list",
+          "cachedResultName": "Sponsor Entity Review Queue",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1788003007"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Job ID": "={{ $json.id }}",
+            "Job Title": "={{ $json.title }}",
+            "Apply URL": "={{ $json.applyUrl }}",
+            "Company Identity": "={{ $json.company }}",
+            "Company Identity Basis": "={{ $json.company_identity.identityBasis }}",
+            "Company Website": "={{ $json.enriched_company_data?.homepage_uri ?? $json.v5_processed_job_data?.company_website ?? '' }}",
+            "Manual Review Reason": "={{ 'No verified sponsor entity mapping exists for \"' + $json.company + '\". The correct H-1B sponsor/legal petitioner must be verified before sponsorship lookup.' }}",
+            "Review Status": "Pending"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply URL",
+              "displayName": "Apply URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Identity",
+              "displayName": "Company Identity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Identity Basis",
+              "displayName": "Company Identity Basis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Website",
+              "displayName": "Company Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sponsor Search Attempt",
+              "displayName": "Sponsor Search Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sponsor Search Result / Candidates",
+              "displayName": "Sponsor Search Result / Candidates",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Manual Review Reason",
+              "displayName": "Manual Review Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Verified Sponsor Entity Name",
+              "displayName": "Verified Sponsor Entity Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mapping Evidence / Source",
+              "displayName": "Mapping Evidence / Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Review Status",
+              "displayName": "Review Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3888,
+        -272
+      ],
+      "id": "30dfb21a-5f4a-4089-9128-fb60c5494410",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const html = String($json.data ?? '');\n\n// Recover the complete job record that entered the HTTP request\nconst job = $('Prepare Sponsor Search').item.json;\n\n// Detect an explicit no-results response\nconst noResults =\n  /returns\\s+no\\s+results/i.test(html);\n\n// Extract the result table row\nconst rowRegex =\n  /<tr>\\s*<td>1<\\/td>\\s*<td>(.*?)<\\/td>\\s*<td[^>]*>\\s*<a\\s+href=['\"]([^'\"]+)['\"][^>]*>(.*?)<\\/td>\\s*<td>(.*?)<\\/td>\\s*<td>(.*?)<\\/td>\\s*<\\/tr>/is;\n\nconst match = html.match(rowRegex);\n\nfunction clean(value) {\n  return String(value ?? '')\n    .replace(/<[^>]+>/g, '')\n    .replace(/&nbsp;/gi, ' ')\n    .replace(/&amp;/gi, '&')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nlet sponsorLookup = {\n  searchTerm: job.sponsorSearchTerm ?? '',\n  found: false,\n  resultCount: 0,\n  employerName: null,\n  employerPath: null,\n  visaRank: null,\n  h1bDeniedOrWithdrawn: null,\n  h1bTotalApplications: null,\n  greenCardDeniedOrWithdrawn: null,\n  greenCardTotalApplications: null,\n};\n\nif (!noResults && match) {\n  const visaRank = clean(match[1]);\n  const employerPath = clean(match[2]);\n  const employerName = clean(match[3]);\n\n  const h1b = clean(match[4]).match(/(\\d+)\\s*\\/\\s*(\\d+)/);\n  const greenCard = clean(match[5]).match(/(\\d+)\\s*\\/\\s*(\\d+)/);\n\n  sponsorLookup = {\n    ...sponsorLookup,\n    found: true,\n    resultCount: 1,\n    employerName,\n    employerPath,\n    visaRank: visaRank === '-' ? null : Number(visaRank),\n\n    h1bDeniedOrWithdrawn: h1b ? Number(h1b[1]) : null,\n    h1bTotalApplications: h1b ? Number(h1b[2]) : null,\n\n    greenCardDeniedOrWithdrawn: greenCard ? Number(greenCard[1]) : null,\n    greenCardTotalApplications: greenCard ? Number(greenCard[2]) : null,\n  };\n}\n\nreturn {\n  json: {\n    ...job,\n    sponsor_lookup: sponsorLookup,\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4464,
+        -384
+      ],
+      "id": "c4f285f7-99c6-490e-b30e-afbbcadf6bf9",
+      "name": "Parse MyVisaJobs Employer Result"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const lookup = $json.sponsor_lookup ?? {};\n\nlet sponsorHistoryStatus;\n\nif (!lookup.found) {\n  sponsorHistoryStatus = 'LOOKUP_UNRESOLVED';\n} else if (\n  Number.isFinite(lookup.h1bTotalApplications) &&\n  lookup.h1bTotalApplications > 0\n) {\n  sponsorHistoryStatus = 'HAS_H1B_HISTORY';\n} else if (\n  Number.isFinite(lookup.h1bTotalApplications) &&\n  lookup.h1bTotalApplications === 0\n) {\n  sponsorHistoryStatus = 'NO_H1B_HISTORY_FOUND';\n} else {\n  sponsorHistoryStatus = 'LOOKUP_UNRESOLVED';\n}\n\nreturn {\n  json: {\n    ...$json,\n\n    sponsor_history: {\n      status: sponsorHistoryStatus,\n      hasRecentH1BHistory:\n        sponsorHistoryStatus === 'HAS_H1B_HISTORY',\n\n      h1bTotalApplications:\n        lookup.h1bTotalApplications ?? null,\n\n      h1bDeniedOrWithdrawn:\n        lookup.h1bDeniedOrWithdrawn ?? null,\n\n      visaRank:\n        lookup.visaRank ?? null,\n\n      matchedEmployer:\n        lookup.employerName ?? null,\n    },\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1568,
+        -304
+      ],
+      "id": "72872c8d-b9d5-46ef-a5f4-c2e8d5b68260",
+      "name": "Classify Sponsor History"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.sponsor_history.status }}",
+                    "rightValue": "HAS_H1B_HISTORY",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "8a79d36f-c1fb-4caa-a8b3-3761ecbd0125"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Has H-1B History"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "40531c5b-7dd0-4913-91e6-1760b392063b",
+                    "leftValue": "={{ $json.sponsor_history.status }}",
+                    "rightValue": "NO_H1B_HISTORY_FOUND",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "No H-1B History"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "330f257f-e501-4b0e-a8ca-be54df2cd90d",
+                    "leftValue": "={{ $json.sponsor_history.status }}",
+                    "rightValue": "LOOKUP_UNRESOLVED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Lookup Review"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": 2
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1808,
+        -304
+      ],
+      "id": "3a674deb-2bb3-4a22-a1a0-f7e83f66588a",
+      "name": "Sponsor Route History"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const text = String($json.descriptionText ?? '')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\nconst noSponsorshipPatterns = [\n  /(?:does not|doesn't|do not|don't|will not|won't|cannot|can't)\\s+(?:provide|offer|support)?\\s*(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /no\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /without\\s+(?:current or future\\s+)?(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /not\\s+(?:eligible|available)\\s+for\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /must\\s+(?:be\\s+)?(?:currently\\s+)?authorized\\s+to\\s+work\\s+in\\s+the\\s+(?:u\\.?s\\.?|united states)\\s+without\\s+(?:current or future\\s+)?sponsorship/i,\n\n  /unable\\s+to\\s+(?:provide|offer|support)\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n];\n\nconst sponsorshipAvailablePatterns = [\n  /visa\\s+sponsorship\\s+(?:is\\s+)?available/i,\n  /sponsorship\\s+(?:is\\s+)?available/i,\n  /we\\s+(?:provide|offer|support)\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n];\n\nconst noMatches = noSponsorshipPatterns\n  .filter(pattern => pattern.test(text))\n  .map(pattern => pattern.source);\n\nconst yesMatches = sponsorshipAvailablePatterns\n  .filter(pattern => pattern.test(text))\n  .map(pattern => pattern.source);\n\nlet status = 'NOT_STATED';\n\nif (noMatches.length > 0 && yesMatches.length > 0) {\n  status = 'AMBIGUOUS';\n} else if (noMatches.length > 0) {\n  status = 'EXPLICIT_NO_SPONSORSHIP';\n} else if (yesMatches.length > 0) {\n  status = 'EXPLICIT_SPONSORSHIP_AVAILABLE';\n}\n\nreturn {\n  json: {\n    ...$json,\n\n    job_sponsorship: {\n      status,\n      explicitRestrictionFound: status === 'EXPLICIT_NO_SPONSORSHIP',\n      explicitAvailabilityFound:\n        status === 'EXPLICIT_SPONSORSHIP_AVAILABLE',\n      matchedNoSponsorshipPatterns: noMatches,\n      matchedSponsorshipAvailablePatterns: yesMatches,\n    },\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        -288
+      ],
+      "id": "bf67b771-3bc0-41c1-b724-b69e363e936d",
+      "name": "Classify Job Sponsorship Language"
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-automation",
+  "repo_owner": "Almee98",
+  "repo_path": "workflows/",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-07-13T15:24:31.919Z",
+      "createdAt": "2026-07-13T15:24:31.919Z",
+      "role": "workflow:owner",
+      "workflowId": "v8aJJzGScZ4Ank4s",
+      "projectId": "6vvj3dOnaSovrQI9"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-08-10T19:44:49.131Z",
+  "versionId": "83f04e7c-3548-4f8c-9035-e149be014c72"
+}
