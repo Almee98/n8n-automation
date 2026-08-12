@@ -184,18 +184,7 @@
       "main": [
         [
           {
-            "node": "Attach Sponsor Entity Mapping",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Attach Sponsor Entity Mapping": {
-      "main": [
-        [
-          {
-            "node": "Route Sponsor Entity Mapping",
+            "node": "Attach Sponsor Entity Mapping [Legacy Sheets]",
             "type": "main",
             "index": 0
           }
@@ -395,6 +384,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Find Sponsor Entity Mapping in Supabase",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -407,6 +403,44 @@
             "index": 0
           }
         ]
+      ]
+    },
+    "Attach Created Job Record": {
+      "main": [
+        [
+          {
+            "node": "Find Sponsor Entity Mapping in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Sponsor Entity Mapping in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Attach Sponsor Entity Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Sponsor Entity Mapping [Legacy Sheets]": {
+      "main": [
+        [
+          {
+            "node": "Route Sponsor Entity Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Sponsor Entity Mapping": {
+      "main": [
+        []
       ]
     }
   },
@@ -778,19 +812,6 @@
           "name": "Google Sheets account"
         }
       }
-    },
-    {
-      "parameters": {
-        "jsCode": "const jobs = $('Prepare Job Record').all().map(item => item.json);\n\n// Remove the empty {} produced by \"Always Output Data\"\nconst mappings = $input.all()\n  .map(item => item.json)\n  .filter(mapping => Object.keys(mapping).length > 0);\n\nfunction normalize(value) {\n  return String(value ?? '')\n    .trim()\n    .toLowerCase();\n}\n\n// Build reusable lookup by Company Identity\nconst mappingByCompany = new Map();\n\nfor (const mapping of mappings) {\n  const key = normalize(mapping['Company Identity']);\n\n  if (key) {\n    mappingByCompany.set(key, mapping);\n  }\n}\n\nreturn jobs.map(job => {\n  const mapping =\n    mappingByCompany.get(normalize(job.company)) ?? null;\n\n  return {\n    json: {\n      ...job,\n\n      sponsor_entity_mapping: mapping,\n\n      hasSponsorEntityMapping: Boolean(\n        mapping &&\n        mapping['Mapping Status'] === 'Verified' &&\n        mapping['Verified Sponsor Entity Name']\n      ),\n    },\n  };\n});"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        3712,
-        -368
-      ],
-      "id": "1220a4d2-1a7a-4865-8e0b-70fc8f38a809",
-      "name": "Attach Sponsor Entity Mapping"
     },
     {
       "parameters": {
@@ -1805,6 +1826,63 @@
       ],
       "id": "e43b10e0-4b3b-4ecc-a758-c073ae7fb57c",
       "name": "Attach Created Job Record"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "sponsor_entity_mappings",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "mapping_status",
+              "condition": "eq",
+              "keyValue": "Verified"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        5264,
+        320
+      ],
+      "id": "720b66db-c533-4846-91fb-31bdc56b90d5",
+      "name": "Find Sponsor Entity Mapping in Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const jobs = $('Prepare Job Record').all().map(item => item.json);\n\n// Remove the empty {} produced by \"Always Output Data\"\nconst mappings = $input.all()\n  .map(item => item.json)\n  .filter(mapping => Object.keys(mapping).length > 0);\n\nfunction normalize(value) {\n  return String(value ?? '')\n    .trim()\n    .toLowerCase();\n}\n\n// Build reusable lookup by Company Identity\nconst mappingByCompany = new Map();\n\nfor (const mapping of mappings) {\n  const key = normalize(mapping['Company Identity']);\n\n  if (key) {\n    mappingByCompany.set(key, mapping);\n  }\n}\n\nreturn jobs.map(job => {\n  const mapping =\n    mappingByCompany.get(normalize(job.company)) ?? null;\n\n  return {\n    json: {\n      ...job,\n\n      sponsor_entity_mapping: mapping,\n\n      hasSponsorEntityMapping: Boolean(\n        mapping &&\n        mapping['Mapping Status'] === 'Verified' &&\n        mapping['Verified Sponsor Entity Name']\n      ),\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3712,
+        -368
+      ],
+      "id": "1220a4d2-1a7a-4865-8e0b-70fc8f38a809",
+      "name": "Attach Sponsor Entity Mapping [Legacy Sheets]"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sourceJobs = [\n  ...$('Attach Job Record')\n    .all()\n    .map(item => item.json)\n    .filter(job => job.hasJobRecord),\n\n  ...$('Attach Created Job Record')\n    .all()\n    .map(item => item.json),\n];\n\n// Remove duplicate jobs in case one of the branches contributes\n// something already represented above.\nconst jobsById = new Map();\n\nfor (const job of sourceJobs) {\n  jobsById.set(job.id, job);\n}\n\nconst jobs = Array.from(jobsById.values());\n\n// Ignore {} produced by Always Output Data\nconst mappingRows = $input.all()\n  .map(item => item.json)\n  .filter(row => row && row.id && row.company_id);\n\n// A company may eventually have more than one mapping.\nconst mappingsByCompanyId = new Map();\n\nfor (const mapping of mappingRows) {\n  const existing =\n    mappingsByCompanyId.get(mapping.company_id) ?? [];\n\n  existing.push(mapping);\n\n  mappingsByCompanyId.set(\n    mapping.company_id,\n    existing\n  );\n}\n\nreturn jobs.map(job => {\n  const mappings =\n    mappingsByCompanyId.get(job.company_id) ?? [];\n\n  return {\n    json: {\n      ...job,\n\n      sponsor_entity_mappings: mappings,\n\n      sponsor_entity_mapping_count:\n        mappings.length,\n\n      sponsor_entity_mapping:\n        mappings.length === 1\n          ? mappings[0]\n          : null,\n\n      hasUniqueSponsorEntityMapping:\n        mappings.length === 1,\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5472,
+        320
+      ],
+      "id": "9bd57b79-1668-40f0-b9a8-56280ff60d91",
+      "name": "Attach Sponsor Entity Mapping"
     }
   ],
   "pinData": {},
@@ -1828,6 +1906,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-08-12T21:08:10.890Z",
-  "versionId": "88d7be3c-7eac-44c0-a2d6-810d01822ad6"
+  "updatedAt": "2026-08-12T21:35:03.404Z",
+  "versionId": "1de3562f-2de2-4230-b70e-3525925a7d1e"
 }
