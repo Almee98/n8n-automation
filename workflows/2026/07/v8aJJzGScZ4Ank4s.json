@@ -56,7 +56,7 @@
       "main": [
         [
           {
-            "node": "Find Sponsor Entity Mapping",
+            "node": "Find Company in Supabase",
             "type": "main",
             "index": 0
           }
@@ -280,6 +280,134 @@
           }
         ]
       ]
+    },
+    "Find Company in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Attach Company Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Company Record": {
+      "main": [
+        [
+          {
+            "node": "Route Company Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Company Record": {
+      "main": [
+        [
+          {
+            "node": "Prepare Job for Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare New Companies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare New Companies": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Attach Created Company Records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Created Company Records": {
+      "main": [
+        [
+          {
+            "node": "Prepare Job for Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Job for Supabase": {
+      "main": [
+        [
+          {
+            "node": "Find Job in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Job in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Attach Job Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Job Record": {
+      "main": [
+        [
+          {
+            "node": "Route Job Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Job Record": {
+      "main": [
+        [
+          {
+            "node": "Create Job in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Job in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Attach Created Job Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-07-13T15:24:31.911Z",
@@ -297,7 +425,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        0
+        -272
       ],
       "id": "7b2d9dec-f506-4ed2-af82-4d3d22c80871",
       "name": "When clicking ‘Execute workflow’"
@@ -337,8 +465,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        208,
-        0
+        224,
+        -272
       ],
       "id": "36a15bf8-b859-4890-a741-31c1dfb94060",
       "name": "Edit Fields"
@@ -351,8 +479,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        416,
-        0
+        448,
+        -272
       ],
       "id": "c81f6c6d-cf75-4757-beef-33210bce628e",
       "name": "HTTP Request"
@@ -364,8 +492,8 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        832,
-        0
+        896,
+        -272
       ],
       "id": "874d2f20-7cbc-4574-bbb1-956a96e9c399",
       "name": "Limit"
@@ -378,8 +506,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3120,
-        -464
+        3040,
+        -368
       ],
       "id": "280b4285-10d3-4f49-857f-daa4434d0869",
       "name": "Prepare Job Record",
@@ -393,8 +521,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1184,
-        80
+        1120,
+        -192
       ],
       "id": "25508a04-5e32-4fd9-8dbd-8b12fda06aa2",
       "name": "Fetch Full Job Description",
@@ -408,7 +536,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3936,
+        4160,
         -464
       ],
       "id": "c43d4446-e4ec-47b1-a383-7e365aa9fc37",
@@ -422,8 +550,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        4192,
-        -416
+        4384,
+        -464
       ],
       "id": "77bcc9d5-12cf-4603-8b39-8e4b9512a360",
       "name": "Search MyVisaJobs Employer"
@@ -445,8 +573,8 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
-        2288,
-        -304
+        2240,
+        -272
       ],
       "id": "ae60eebb-dc3f-48b8-bddc-6b43ea14f059",
       "name": "Resolve Company Identity"
@@ -464,8 +592,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        2272,
-        -128
+        2256,
+        -48
       ],
       "id": "d42f06f1-2d00-4834-97ec-58ae138a9837",
       "name": "OpenAI Chat Model",
@@ -484,8 +612,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        2432,
-        -128
+        2384,
+        -48
       ],
       "id": "5abad9d5-a20c-4730-8f32-c5c52d0b784d",
       "name": "Structured Output Parser"
@@ -554,7 +682,7 @@
       "typeVersion": 3.4,
       "position": [
         2816,
-        -480
+        -272
       ],
       "id": "4ad968f4-7814-467c-8100-2c3507722f38",
       "name": "Route Company Identity"
@@ -566,8 +694,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        624,
-        0
+        672,
+        -272
       ],
       "id": "18cb1ba6-bb14-4845-afec-3eb52e1a169d",
       "name": "Parse HiringCafe Search Results"
@@ -589,8 +717,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1376,
-        -304
+        1344,
+        -272
       ],
       "id": "34303582-a905-499f-910a-21daca023587",
       "name": "Merge Job Metadata + Description"
@@ -604,7 +732,7 @@
       "typeVersion": 2,
       "position": [
         2592,
-        -320
+        -272
       ],
       "id": "12730a61-ed60-40f3-adea-10ec3037428b",
       "name": "Build Resolved Job Record"
@@ -638,8 +766,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3344,
-        -416
+        3488,
+        -368
       ],
       "id": "2c70e4f2-ce40-4b38-b86f-043c5db62fce",
       "name": "Find Sponsor Entity Mapping",
@@ -658,8 +786,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3536,
-        -400
+        3712,
+        -368
       ],
       "id": "1220a4d2-1a7a-4865-8e0b-70fc8f38a809",
       "name": "Attach Sponsor Entity Mapping"
@@ -702,7 +830,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        3712,
+        3936,
         -368
       ],
       "id": "08f292df-abfa-4a53-bf61-9802bb2179c1",
@@ -716,8 +844,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4432,
-        -400
+        4608,
+        -464
       ],
       "id": "c4f285f7-99c6-490e-b30e-afbbcadf6bf9",
       "name": "Parse MyVisaJobs Employer Result"
@@ -730,8 +858,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4640,
-        -384
+        4832,
+        -464
       ],
       "id": "72872c8d-b9d5-46ef-a5f4-c2e8d5b68260",
       "name": "Classify Sponsor History"
@@ -823,8 +951,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        4896,
-        -400
+        5056,
+        -480
       ],
       "id": "3a674deb-2bb3-4a22-a1a0-f7e83f66588a",
       "name": "Sponsor Route History"
@@ -838,7 +966,7 @@
       "typeVersion": 2,
       "position": [
         1792,
-        -304
+        -272
       ],
       "id": "bf67b771-3bc0-41c1-b724-b69e363e936d",
       "name": "Classify Job Sponsorship Language"
@@ -851,8 +979,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1584,
-        -304
+        1568,
+        -272
       ],
       "id": "3929cf47-a97c-4e7d-963d-cfa59c446d13",
       "name": "Normalize Description"
@@ -895,7 +1023,7 @@
       "typeVersion": 3.4,
       "position": [
         2016,
-        -320
+        -272
       ],
       "id": "e6542fa6-7c76-4340-ac55-7a698c16b685",
       "name": "Route Job Sponsorship Language"
@@ -924,7 +1052,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        5104,
+        5488,
         -368
       ],
       "id": "06738918-bc29-481d-b0f4-7bf17fecd47f",
@@ -1097,8 +1225,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3952,
-        -256
+        4160,
+        -272
       ],
       "id": "30dfb21a-5f4a-4089-9128-fb60c5494410",
       "name": "Manual Employer Review",
@@ -1282,8 +1410,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2848,
-        -224
+        3040,
+        -176
       ],
       "id": "d80895ba-587f-4ec8-baab-21f0f6f9ef26",
       "name": "Manual Review",
@@ -1293,6 +1421,390 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "companies",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "identity_name",
+              "condition": "eq",
+              "keyValue": "={{ $json.company }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3264,
+        -368
+      ],
+      "id": "6c641c9c-84e4-4164-a259-b851384f9a43",
+      "name": "Find Company in Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const jobs = $('Prepare Job Record').all().map(item => item.json);\n\n// Ignore the empty {} generated by Always Output Data\nconst companyRows = $input.all()\n  .map(item => item.json)\n  .filter(row => row.id && row.identity_name);\n\nfunction normalize(value) {\n  return String(value ?? '')\n    .trim()\n    .toLowerCase();\n}\n\nconst companyByName = new Map();\n\nfor (const company of companyRows) {\n  companyByName.set(\n    normalize(company.identity_name),\n    company\n  );\n}\n\nreturn jobs.map(job => {\n  const companyRecord =\n    companyByName.get(normalize(job.company)) ?? null;\n\n  return {\n    json: {\n      ...job,\n\n      company_record: companyRecord,\n      company_id: companyRecord?.id ?? null,\n      hasCompanyRecord: Boolean(companyRecord),\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2992,
+        336
+      ],
+      "id": "c5682dea-9f9e-4fa2-9545-4a95a6d57fcc",
+      "name": "Attach Company Record"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.hasCompanyRecord }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "5ed48e2e-7520-4ade-aa4e-5372effab759"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Existing Company"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "647077a6-75f5-481a-b3ed-98b7c6cc741c",
+                    "leftValue": "={{ $json.hasCompanyRecord }}",
+                    "rightValue": "New Company",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "New Company"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        3200,
+        336
+      ],
+      "id": "01776637-e136-4899-97f3-75b1573da949",
+      "name": "Route Company Record"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jobs = $input.all().map(item => item.json);\n\nfunction normalize(value) {\n  return String(value ?? '')\n    .trim()\n    .toLowerCase();\n}\n\nconst companies = new Map();\n\nfor (const job of jobs) {\n  const identityName = String(job.company ?? '').trim();\n\n  const website = String(\n    job.enriched_company_data?.homepage_uri ??\n    job.v5_processed_job_data?.company_website ??\n    ''\n  ).trim();\n\n  if (!identityName) {\n    continue;\n  }\n\n  const key = `${normalize(identityName)}|${normalize(website)}`;\n\n  if (!companies.has(key)) {\n    companies.set(key, {\n      identity_name: identityName,\n      website: website || null,\n    });\n  }\n}\n\nreturn Array.from(companies.values()).map(company => ({\n  json: company,\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3408,
+        432
+      ],
+      "id": "1c103981-a139-4fde-8e17-a6e2ea793a01",
+      "name": "Prepare New Companies"
+    },
+    {
+      "parameters": {
+        "tableId": "companies",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "identity_name",
+              "fieldValue": "={{ $json.identity_name }}"
+            },
+            {
+              "fieldId": "website",
+              "fieldValue": "={{ $json.website }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3616,
+        432
+      ],
+      "id": "366bc486-fa87-4fac-aab8-ed6592e2b65a",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Companies that were just created in Supabase\nconst createdCompanies = $input.all().map(item => item.json);\n\n// Original jobs that did not previously have a company record\nconst jobs = $('Attach Company Record')\n  .all()\n  .map(item => item.json)\n  .filter(job => !job.hasCompanyRecord);\n\nfunction normalize(value) {\n  return String(value ?? '')\n    .trim()\n    .toLowerCase();\n}\n\nfunction getJobWebsite(job) {\n  return String(\n    job.enriched_company_data?.homepage_uri ??\n    job.v5_processed_job_data?.company_website ??\n    ''\n  ).trim();\n}\n\n// Build lookup using the same identity + website key\n// that we used when deduplicating new companies.\nconst companyByKey = new Map();\n\nfor (const company of createdCompanies) {\n  const key =\n    `${normalize(company.identity_name)}|${normalize(company.website)}`;\n\n  companyByKey.set(key, company);\n}\n\nreturn jobs.map(job => {\n  const website = getJobWebsite(job);\n\n  const key =\n    `${normalize(job.company)}|${normalize(website)}`;\n\n  const companyRecord = companyByKey.get(key);\n\n  if (!companyRecord) {\n    throw new Error(\n      `Could not attach newly created company record for \"${job.company}\"`\n    );\n  }\n\n  return {\n    json: {\n      ...job,\n\n      company_record: companyRecord,\n      company_id: companyRecord.id,\n      hasCompanyRecord: true,\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3824,
+        432
+      ],
+      "id": "ebd2557f-a759-4d63-a0d5-2c1ab8fc1688",
+      "name": "Attach Created Company Records"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "jobs",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        4272,
+        304
+      ],
+      "id": "c8ca1653-dc37-4d77-a91d-d9d2467a160d",
+      "name": "Find Job in Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const job = $json;\n\nfunction extractDomain(url) {\n  const value = String(url ?? '').trim();\n\n  const match = value.match(/^https?:\\/\\/([^/?#]+)/i);\n\n  return match?.[1]?.toLowerCase() ?? null;\n}\n\nconst applyDomain = extractDomain(\n  job.applyUrl ?? job.apply_url\n);\n\nreturn {\n  json: {\n    ...job,\n\n    job_db_record: {\n      id: job.id,\n      company_id: job.company_id,\n\n      title: job.title ?? null,\n      source: job.source ?? null,\n      board_token: job.board_token ?? null,\n\n      apply_url: \n        job.applyUrl ??\n        job.apply_url ??\n        null,\n      \n      apply_domain: applyDomain,\n\n      description_text: job.descriptionText ?? null,\n      description_html: job.descriptionHtml ?? null,\n\n      company_identity_basis:\n        job.company_identity?.identityBasis ?? null,\n\n      company_identity_confidence:\n        job.company_identity?.confidence ?? null,\n\n      company_identity_evidence:\n        job.company_identity?.evidence ?? [],\n\n      job_sponsorship_language_status:\n        job.job_sponsorship?.status ?? null,\n\n      // Preserve the complete source/context record.\n      raw_job: job,\n    },\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4080,
+        304
+      ],
+      "id": "f8c65a9a-0a20-42ea-a7dc-e62bce162eef",
+      "name": "Prepare Job for Supabase"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sourceJobs = $('Prepare Job for Supabase')\n  .all()\n  .map(item => item.json);\n\n// Supabase may return:\n// - one {} if nothing matched\n// - only the rows that actually matched\n// - all rows if all jobs already exist\nconst lookupResults = $input.all()\n  .map(item => item.json)\n  .filter(row => row && row.id);\n\n// Build lookup by job ID\nconst existingJobsById = new Map();\n\nfor (const row of lookupResults) {\n  existingJobsById.set(row.id, row);\n}\n\nreturn sourceJobs.map(sourceJob => {\n  const existingJob =\n    existingJobsById.get(sourceJob.id) ?? null;\n\n  return {\n    json: {\n      ...sourceJob,\n\n      job_record: existingJob,\n      hasJobRecord: Boolean(existingJob),\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4480,
+        304
+      ],
+      "id": "3dc1ca59-63b4-4052-bb6a-3a1acd112ea0",
+      "name": "Attach Job Record"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.hasJobRecord }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    },
+                    "id": "cf3bbf6e-6f56-4deb-9894-c12397e9daeb"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "New job"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d655c8e6-5314-4f76-a473-a10b5be1607f",
+                    "leftValue": "={{ $json.hasJobRecord }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Existing job"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        4688,
+        304
+      ],
+      "id": "954b0fe4-d47d-497b-9185-9821f3e6a9d3",
+      "name": "Route Job Record"
+    },
+    {
+      "parameters": {
+        "tableId": "jobs",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "id",
+              "fieldValue": "={{ $json.job_db_record.id }}"
+            },
+            {
+              "fieldId": "company_id",
+              "fieldValue": "={{ $json.job_db_record.company_id }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.job_db_record.title }}"
+            },
+            {
+              "fieldId": "source",
+              "fieldValue": "={{ $json.job_db_record.source }}"
+            },
+            {
+              "fieldId": "board_token",
+              "fieldValue": "={{ $json.job_db_record.board_token }}"
+            },
+            {
+              "fieldId": "apply_url",
+              "fieldValue": "={{ $json.job_db_record.apply_url }}"
+            },
+            {
+              "fieldId": "apply_domain",
+              "fieldValue": "={{ $json.job_db_record.apply_domain }}"
+            },
+            {
+              "fieldId": "description_text",
+              "fieldValue": "={{ $json.job_db_record.description_text }}"
+            },
+            {
+              "fieldId": "description_html",
+              "fieldValue": "={{ $json.job_db_record.description_html }}"
+            },
+            {
+              "fieldId": "company_identity_basis",
+              "fieldValue": "={{ $json.job_db_record.company_identity_basis }}"
+            },
+            {
+              "fieldId": "company_identity_confidence",
+              "fieldValue": "={{ $json.job_db_record.company_identity_confidence }}"
+            },
+            {
+              "fieldId": "company_identity_evidence",
+              "fieldValue": "={{ $json.job_db_record.company_identity_evidence }}"
+            },
+            {
+              "fieldId": "job_sponsorship_language_status",
+              "fieldValue": "={{ $json.job_db_record.job_sponsorship_language_status }}"
+            },
+            {
+              "fieldId": "raw_job",
+              "fieldValue": "={{ $json.job_db_record.raw_job }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        4896,
+        208
+      ],
+      "id": "6a80d2da-f01a-455a-9c2f-71bd7dc0974e",
+      "name": "Create Job in Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const createdJobs = $input.all()\n  .map(item => item.json);\n\nconst sourceJobs = $('Attach Job Record')\n  .all()\n  .map(item => item.json)\n  .filter(job => !job.hasJobRecord);\n\nconst createdById = new Map();\n\nfor (const job of createdJobs) {\n  createdById.set(job.id, job);\n}\n\nreturn sourceJobs.map(sourceJob => {\n  const createdJob =\n    createdById.get(sourceJob.id) ?? null;\n\n  if (!createdJob) {\n    throw new Error(\n      `Could not attach newly created job record for \"${sourceJob.id}\"`\n    );\n  }\n\n  return {\n    json: {\n      ...sourceJob,\n\n      job_record: createdJob,\n      hasJobRecord: true,\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5104,
+        208
+      ],
+      "id": "e43b10e0-4b3b-4ecc-a758-c073ae7fb57c",
+      "name": "Attach Created Job Record"
     }
   ],
   "pinData": {},
@@ -1316,6 +1828,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-08-12T12:27:42.023Z",
-  "versionId": "ae8e11ba-f92f-406f-a884-b8277836d4d0"
+  "updatedAt": "2026-08-12T21:08:10.890Z",
+  "versionId": "88d7be3c-7eac-44c0-a2d6-810d01822ad6"
 }
