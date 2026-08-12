@@ -21,11 +21,6 @@
             "node": "HTTP Request",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "Fetch Sponsor List",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -57,41 +52,9 @@
         ]
       ]
     },
-    "Prepare Sponsor Records": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "Fetch Sponsor List": {
-      "main": [
-        [
-          {
-            "node": "Inspect HTML",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Check Sponsor": {
-      "main": [
-        []
-      ]
-    },
     "Prepare Job Record": {
       "main": [
         [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 0
-          },
           {
             "node": "Find Sponsor Entity Mapping",
             "type": "main",
@@ -107,28 +70,6 @@
             "node": "Merge Job Metadata + Description",
             "type": "main",
             "index": 1
-          }
-        ]
-      ]
-    },
-    "Inspect HTML": {
-      "main": [
-        [
-          {
-            "node": "Prepare Sponsor Records",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge": {
-      "main": [
-        [
-          {
-            "node": "Check Sponsor",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -199,7 +140,7 @@
         ],
         [
           {
-            "node": "Append row in sheet",
+            "node": "Manual Review",
             "type": "main",
             "index": 0
           }
@@ -272,7 +213,7 @@
         ],
         [
           {
-            "node": "Append row in sheet1",
+            "node": "Manual Employer Review",
             "type": "main",
             "index": 0
           }
@@ -431,57 +372,14 @@
     },
     {
       "parameters": {
-        "jsCode": "const companies = $input.first().json.companies ?? [];\nconst lcaCounts = $input.first().json.lcaCounts ?? [];\n\nif (companies.length !== lcaCounts.length) {\n  throw new Error(\n    `Different array lengths: ${companies.length} companies and ${lcaCounts.length} LCA counts`\n  );\n}\n\nreturn companies.map((company, index) => ({\n  json: {\n    company,\n    lcaCount: Number(\n      String(lcaCounts[index] ?? '').replace(/,/g, '')\n    ),\n  },\n}));"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1248,
-        480
-      ],
-      "id": "b2cd5e93-80ee-4bc5-992d-cbd41c88bcfd",
-      "name": "Prepare Sponsor Records",
-      "notes": "Prepare Sponsor Records"
-    },
-    {
-      "parameters": {
-        "url": "={{ $('Edit Fields').item.json.sponsorListUrl }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        544,
-        480
-      ],
-      "id": "35a171a8-8b03-419c-803a-1f6355913456",
-      "name": "Fetch Sponsor List",
-      "notes": "Fetch Sponsor List"
-    },
-    {
-      "parameters": {
-        "jsCode": "const items = $input.all().map((item) => item.json);\n\n// Collect all prepared job records\nconst jobs = items.filter(\n  (item) => item.id && item.title && item.applyUrl\n);\n\n// Collect all sponsor records\nconst sponsors = items.filter(\n  (item) =>\n    item.company &&\n    typeof item.lcaCount === 'number' &&\n    !item.id\n);\n\nif (jobs.length === 0) {\n  throw new Error('No prepared job records were found');\n}\n\nif (sponsors.length === 0) {\n  throw new Error('No sponsor records were found');\n}\n\nfunction normalizeCompanyName(name) {\n  return String(name ?? '')\n    .toLowerCase()\n    .replace(\n      /\\b(incorporated|corporation|company|limited|llc|inc|corp|ltd|usa|us)\\b/g,\n      ''\n    )\n    .replace(/[^a-z0-9]/g, '')\n    .trim();\n}\n\nreturn jobs.map((job) => {\n  const normalizedCompany = normalizeCompanyName(job.company);\n\n  const matchedSponsor = sponsors.find((sponsor) => {\n    const normalizedSponsor = normalizeCompanyName(sponsor.company);\n\n    return (\n      normalizedCompany === normalizedSponsor ||\n      normalizedCompany.includes(normalizedSponsor) ||\n      normalizedSponsor.includes(normalizedCompany)\n    );\n  });\n\n  return {\n    json: {\n      ...job,\n      normalizedCompany,\n      hasSponsorHistory: Boolean(matchedSponsor),\n      matchedSponsorName: matchedSponsor?.company ?? null,\n      lcaCount: matchedSponsor?.lcaCount ?? 0,\n    },\n  };\n});"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        3472,
-        512
-      ],
-      "id": "d0141eb9-e790-47f7-b416-68822d6c0df7",
-      "name": "Check Sponsor",
-      "notes": "Check Sponsor"
-    },
-    {
-      "parameters": {
         "mode": "runOnceForEachItem",
         "jsCode": "const descriptionHtml =\n  $json.job?.job_information?.description ?? '';\n\n// Convert the HTML description into readable plain text\nconst descriptionText = descriptionHtml\n  .replace(/<br\\s*\\/?>/gi, '\\n')\n  .replace(/<\\/(p|li|div|h[1-6]|ul|ol)>/gi, '\\n')\n  .replace(/<li[^>]*>/gi, '- ')\n  .replace(/<[^>]+>/g, '')\n  .replace(/&nbsp;/g, ' ')\n  .replace(/&amp;/g, '&')\n  .replace(/&lt;/g, '<')\n  .replace(/&gt;/g, '>')\n  .replace(/&quot;/g, '\"')\n  .replace(/&#39;/g, \"'\")\n  .replace(/\\n[ \\t]+/g, '\\n')\n  .replace(/\\n{3,}/g, '\\n\\n')\n  .trim();\n\nconst resolvedCompany =\n  $json.company_identity?.recommendedCompanyName ?? '';\n\nreturn {\n  json: {\n    // Preserve EVERYTHING we've accumulated so far\n    ...$json,\n\n    // Normalized fields used by downstream nodes\n    title:\n      $json.job_information?.title ??\n      $json.v5_processed_job_data?.core_job_title ??\n      '',\n\n    company: resolvedCompany,\n\n    applyUrl: $json.apply_url ?? '',\n\n    requirementsSummary:\n      $json.v5_processed_job_data?.requirements_summary ?? '',\n\n    technicalTools:\n      $json.v5_processed_job_data?.technical_tools ?? [],\n\n    descriptionHtml,\n    descriptionText,\n  },\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3104,
-        -432
+        3120,
+        -464
       ],
       "id": "280b4285-10d3-4f49-857f-daa4434d0869",
       "name": "Prepare Job Record",
@@ -501,45 +399,6 @@
       "id": "25508a04-5e32-4fd9-8dbd-8b12fda06aa2",
       "name": "Fetch Full Job Description",
       "notes": "Fetch Full Job Description"
-    },
-    {
-      "parameters": {
-        "operation": "extractHtmlContent",
-        "extractionValues": {
-          "values": [
-            {
-              "key": "companies",
-              "cssSelector": "table.tbl-top tr:not(:first-child) td:nth-child(2) a",
-              "returnArray": true
-            },
-            {
-              "key": "lcaCounts",
-              "cssSelector": "table.tbl-top tr:not(:first-child) td:nth-child(3) a",
-              "returnArray": true
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.html",
-      "typeVersion": 1.2,
-      "position": [
-        912,
-        480
-      ],
-      "id": "54a89b92-5aa8-49a3-a6b1-8f1ae13a4822",
-      "name": "Inspect HTML"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        3104,
-        496
-      ],
-      "id": "fd793270-a416-4737-b6e2-7a8b6b5f1025",
-      "name": "Merge"
     },
     {
       "parameters": {
@@ -620,12 +479,12 @@
     {
       "parameters": {
         "schemaType": "manual",
-        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"explicitCompanyName\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"recommendedCompanyName\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"identityBasis\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"explicit\",\n        \"trusted_metadata\",\n        \"inferred\",\n        \"unknown\"\n      ]\n    },\n    \"confidence\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 1\n    },\n    \"evidence\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"needsManualReview\": {\n      \"type\": \"boolean\"\n    },\n    \"manualReviewReason\": {\n      \"type\": [\"string\", \"null\"]\n    }\n  },\n  \"required\": [\n    \"sourceCompanyName\",\n    \"recommendedCompanyName\",\n    \"identityBasis\",\n    \"confidence\",\n    \"evidence\",\n    \"needsManualReview\",\n    \"manualReviewReason\"\n  ],\n  \"additionalProperties\": false\n}"
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"explicitCompanyName\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"recommendedCompanyName\": {\n      \"type\": [\"string\", \"null\"]\n    },\n    \"identityBasis\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"explicit\",\n        \"trusted_metadata\",\n        \"inferred\",\n        \"unknown\"\n      ]\n    },\n    \"confidence\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 1\n    },\n    \"evidence\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"needsManualReview\": {\n      \"type\": \"boolean\"\n    },\n    \"manualReviewReason\": {\n      \"type\": [\"string\", \"null\"]\n    }\n  },\n  \"required\": [\n    \"explicitCompanyName\",\n    \"recommendedCompanyName\",\n    \"identityBasis\",\n    \"confidence\",\n    \"evidence\",\n    \"needsManualReview\",\n    \"manualReviewReason\"\n  ],\n  \"additionalProperties\": false\n}"
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        2400,
+        2432,
         -128
       ],
       "id": "5abad9d5-a20c-4730-8f32-c5c52d0b784d",
@@ -699,191 +558,6 @@
       ],
       "id": "4ad968f4-7814-467c-8100-2c3507722f38",
       "name": "Route Company Identity"
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
-          "mode": "list",
-          "cachedResultName": "Manual Review Sheet",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 979464932,
-          "mode": "list",
-          "cachedResultName": "Manual Review Queue",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=979464932"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Timestamp": "={{ $now }}",
-            "Job ID": "={{ $('Limit').item.json.id }}",
-            "Job Title": "={{ $('Limit').item.json.job_information.title }}",
-            "Identity Basis": "={{ $json.company_identity.identityBasis }}",
-            "Confidence": "={{ $json.company_identity.confidence }}",
-            "Manual Review Reason": "={{ $json.company_identity.manualReviewReason }}",
-            "Evidence": "={{ $json.company_identity.evidence.join('\\n') }}",
-            "Apply URL": "={{ $('Limit').item.json.apply_url }}",
-            "Review Status": "Pending",
-            "Raw Source Company Name": "={{ $('Limit').item.json.enriched_company_data?.name ?? $('Limit').item.json.v5_processed_job_data?.company_name ?? $('Limit').item.json.company_name ?? '' }}",
-            "Explicit Company Name": "={{ $json.company_identity.explicitCompanyName }}",
-            "AI Recommended Company Name": "={{ $json.company_identity.recommendedCompanyName }}"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Timestamp",
-              "displayName": "Timestamp",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Job ID",
-              "displayName": "Job ID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Job Title",
-              "displayName": "Job Title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Apply URL",
-              "displayName": "Apply URL",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Raw Source Company Name",
-              "displayName": "Raw Source Company Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Explicit Company Name",
-              "displayName": "Explicit Company Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "AI Recommended Company Name",
-              "displayName": "AI Recommended Company Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "Identity Basis",
-              "displayName": "Identity Basis",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Confidence",
-              "displayName": "Confidence",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Evidence",
-              "displayName": "Evidence",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Manual Review Reason",
-              "displayName": "Manual Review Reason",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Verified Company Name",
-              "displayName": "Verified Company Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Review Status",
-              "displayName": "Review Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Notes",
-              "displayName": "Notes",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        2848,
-        -224
-      ],
-      "id": "d80895ba-587f-4ec8-baab-21f0f6f9ef26",
-      "name": "Append row in sheet",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "biSHvFkUNE3Sct76",
-          "name": "Google Sheets account"
-        }
-      }
     },
     {
       "parameters": {
@@ -1033,185 +707,6 @@
       ],
       "id": "08f292df-abfa-4a53-bf61-9802bb2179c1",
       "name": "Route Sponsor Entity Mapping"
-    },
-    {
-      "parameters": {
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
-          "mode": "list",
-          "cachedResultName": "Manual Review Sheet",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1788003007,
-          "mode": "list",
-          "cachedResultName": "Sponsor Entity Review Queue",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1788003007"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "Timestamp": "={{ $now.toISO() }}",
-            "Job ID": "={{ $json.id }}",
-            "Job Title": "={{ $json.title }}",
-            "Apply URL": "={{ $json.applyUrl }}",
-            "Company Identity": "={{ $json.company }}",
-            "Company Identity Basis": "={{ $json.company_identity.identityBasis }}",
-            "Company Website": "={{ $json.enriched_company_data?.homepage_uri ?? $json.v5_processed_job_data?.company_website ?? '' }}",
-            "Manual Review Reason": "={{ 'No verified sponsor entity mapping exists for \"' + $json.company + '\". The correct H-1B sponsor/legal petitioner must be verified before sponsorship lookup.' }}",
-            "Review Status": "Pending"
-          },
-          "matchingColumns": [],
-          "schema": [
-            {
-              "id": "Timestamp",
-              "displayName": "Timestamp",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Job ID",
-              "displayName": "Job ID",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Job Title",
-              "displayName": "Job Title",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Apply URL",
-              "displayName": "Apply URL",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Company Identity",
-              "displayName": "Company Identity",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Company Identity Basis",
-              "displayName": "Company Identity Basis",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Company Website",
-              "displayName": "Company Website",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Sponsor Search Attempt",
-              "displayName": "Sponsor Search Attempt",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Sponsor Search Result / Candidates",
-              "displayName": "Sponsor Search Result / Candidates",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Manual Review Reason",
-              "displayName": "Manual Review Reason",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Verified Sponsor Entity Name",
-              "displayName": "Verified Sponsor Entity Name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Mapping Evidence / Source",
-              "displayName": "Mapping Evidence / Source",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Review Status",
-              "displayName": "Review Status",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "Notes",
-              "displayName": "Notes",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        3952,
-        -256
-      ],
-      "id": "30dfb21a-5f4a-4089-9128-fb60c5494410",
-      "name": "Append row in sheet1",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "biSHvFkUNE3Sct76",
-          "name": "Google Sheets account"
-        }
-      }
     },
     {
       "parameters": {
@@ -1419,6 +914,385 @@
       ],
       "id": "8d481726-0db3-4302-a571-ceacf9c70275",
       "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Discard this job.",
+        "height": 80,
+        "width": 160
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5104,
+        -368
+      ],
+      "id": "06738918-bc29-481d-b0f4-7bf17fecd47f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1788003007,
+          "mode": "list",
+          "cachedResultName": "Sponsor Entity Review Queue",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1788003007"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Job ID": "={{ $json.id }}",
+            "Job Title": "={{ $json.title }}",
+            "Apply URL": "={{ $json.applyUrl }}",
+            "Company Identity": "={{ $json.company }}",
+            "Company Identity Basis": "={{ $json.company_identity.identityBasis }}",
+            "Company Website": "={{ $json.enriched_company_data?.homepage_uri ?? $json.v5_processed_job_data?.company_website ?? '' }}",
+            "Manual Review Reason": "={{ 'No verified sponsor entity mapping exists for \"' + $json.company + '\". The correct H-1B sponsor/legal petitioner must be verified before sponsorship lookup.' }}",
+            "Review Status": "Pending"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply URL",
+              "displayName": "Apply URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Identity",
+              "displayName": "Company Identity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Identity Basis",
+              "displayName": "Company Identity Basis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Website",
+              "displayName": "Company Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sponsor Search Attempt",
+              "displayName": "Sponsor Search Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sponsor Search Result / Candidates",
+              "displayName": "Sponsor Search Result / Candidates",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Manual Review Reason",
+              "displayName": "Manual Review Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Verified Sponsor Entity Name",
+              "displayName": "Verified Sponsor Entity Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mapping Evidence / Source",
+              "displayName": "Mapping Evidence / Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Review Status",
+              "displayName": "Review Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3952,
+        -256
+      ],
+      "id": "30dfb21a-5f4a-4089-9128-fb60c5494410",
+      "name": "Manual Employer Review",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 979464932,
+          "mode": "list",
+          "cachedResultName": "Manual Review Queue",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=979464932"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "Job ID": "={{ $('Limit').item.json.id }}",
+            "Job Title": "={{ $('Limit').item.json.job_information.title }}",
+            "Identity Basis": "={{ $json.company_identity.identityBasis }}",
+            "Confidence": "={{ $json.company_identity.confidence }}",
+            "Manual Review Reason": "={{ $json.company_identity.manualReviewReason }}",
+            "Evidence": "={{ $json.company_identity.evidence.join('\\n') }}",
+            "Apply URL": "={{ $('Limit').item.json.apply_url }}",
+            "Review Status": "Pending",
+            "Raw Source Company Name": "={{ $('Limit').item.json.enriched_company_data?.name ?? $('Limit').item.json.v5_processed_job_data?.company_name ?? $('Limit').item.json.company_name ?? '' }}",
+            "Explicit Company Name": "={{ $json.company_identity.explicitCompanyName }}",
+            "AI Recommended Company Name": "={{ $json.company_identity.recommendedCompanyName }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply URL",
+              "displayName": "Apply URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Raw Source Company Name",
+              "displayName": "Raw Source Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Explicit Company Name",
+              "displayName": "Explicit Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI Recommended Company Name",
+              "displayName": "AI Recommended Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Identity Basis",
+              "displayName": "Identity Basis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Confidence",
+              "displayName": "Confidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Evidence",
+              "displayName": "Evidence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Manual Review Reason",
+              "displayName": "Manual Review Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Verified Company Name",
+              "displayName": "Verified Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Review Status",
+              "displayName": "Review Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2848,
+        -224
+      ],
+      "id": "d80895ba-587f-4ec8-baab-21f0f6f9ef26",
+      "name": "Manual Review",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -1442,6 +1316,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-08-12T01:38:32.331Z",
-  "versionId": "22ba6bae-09c0-49d6-a77e-fa2dda1f0e2d"
+  "updatedAt": "2026-08-12T12:27:42.023Z",
+  "versionId": "ae8e11ba-f92f-406f-a884-b8277836d4d0"
 }
