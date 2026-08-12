@@ -221,7 +221,7 @@
       "main": [
         [
           {
-            "node": "Resolve Company Identity",
+            "node": "Normalize Description",
             "type": "main",
             "index": 0
           }
@@ -303,6 +303,22 @@
     },
     "Sponsor Route History": {
       "main": [
+        []
+      ]
+    },
+    "Classify Job Sponsorship Language": {
+      "main": [
+        [
+          {
+            "node": "Route Job Sponsorship Language",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Description": {
+      "main": [
         [
           {
             "node": "Classify Job Sponsorship Language",
@@ -312,9 +328,16 @@
         ]
       ]
     },
-    "Classify Job Sponsorship Language": {
+    "Route Job Sponsorship Language": {
       "main": [
-        []
+        [],
+        [
+          {
+            "node": "Resolve Company Identity",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -457,8 +480,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2672,
-        -320
+        3104,
+        -432
       ],
       "id": "280b4285-10d3-4f49-857f-daa4434d0869",
       "name": "Prepare Job Record",
@@ -526,8 +549,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3632,
-        -416
+        3936,
+        -464
       ],
       "id": "c43d4446-e4ec-47b1-a383-7e365aa9fc37",
       "name": "Prepare Sponsor Search"
@@ -540,8 +563,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        3904,
-        -368
+        4192,
+        -416
       ],
       "id": "77bcc9d5-12cf-4603-8b39-8e4b9512a360",
       "name": "Search MyVisaJobs Employer"
@@ -563,7 +586,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
-        1584,
+        2288,
         -304
       ],
       "id": "ae60eebb-dc3f-48b8-bddc-6b43ea14f059",
@@ -582,8 +605,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        1536,
-        -112
+        2272,
+        -128
       ],
       "id": "d42f06f1-2d00-4834-97ec-58ae138a9837",
       "name": "OpenAI Chat Model",
@@ -602,8 +625,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        1696,
-        -112
+        2400,
+        -128
       ],
       "id": "5abad9d5-a20c-4730-8f32-c5c52d0b784d",
       "name": "Structured Output Parser"
@@ -671,8 +694,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        2208,
-        -288
+        2816,
+        -480
       ],
       "id": "4ad968f4-7814-467c-8100-2c3507722f38",
       "name": "Route Company Identity"
@@ -700,15 +723,15 @@
             "Timestamp": "={{ $now }}",
             "Job ID": "={{ $('Limit').item.json.id }}",
             "Job Title": "={{ $('Limit').item.json.job_information.title }}",
-            "Identity Basis": "={{ $json.output.identityBasis }}",
-            "Confidence": "={{ $json.output.confidence }}",
-            "Manual Review Reason": "={{ $json.output.manualReviewReason }}",
-            "Evidence": "={{ $json.output.evidence.join('\\n') }}",
+            "Identity Basis": "={{ $json.company_identity.identityBasis }}",
+            "Confidence": "={{ $json.company_identity.confidence }}",
+            "Manual Review Reason": "={{ $json.company_identity.manualReviewReason }}",
+            "Evidence": "={{ $json.company_identity.evidence.join('\\n') }}",
             "Apply URL": "={{ $('Limit').item.json.apply_url }}",
             "Review Status": "Pending",
             "Raw Source Company Name": "={{ $('Limit').item.json.enriched_company_data?.name ?? $('Limit').item.json.v5_processed_job_data?.company_name ?? $('Limit').item.json.company_name ?? '' }}",
-            "Explicit Company Name": "={{ $json.output.explicitCompanyName }}",
-            "AI Recommended Company Name": "={{ $json.output.recommendedCompanyName }}"
+            "Explicit Company Name": "={{ $json.company_identity.explicitCompanyName }}",
+            "AI Recommended Company Name": "={{ $json.company_identity.recommendedCompanyName }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -850,8 +873,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2464,
-        -240
+        2848,
+        -224
       ],
       "id": "d80895ba-587f-4ec8-baab-21f0f6f9ef26",
       "name": "Append row in sheet",
@@ -901,13 +924,13 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const jobRecord = $('Merge Job Metadata + Description').item.json;\nconst companyIdentity = $json.output;\n\nreturn {\n  json: {\n    ...jobRecord,\n    company_identity: companyIdentity,\n  },\n};"
+        "jsCode": "const jobRecord = $('Classify Job Sponsorship Language').item.json;\nconst companyIdentity = $json.output;\n\nreturn {\n  json: {\n    ...jobRecord,\n    company_identity: companyIdentity,\n  },\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2000,
-        -208
+        2592,
+        -320
       ],
       "id": "12730a61-ed60-40f3-adea-10ec3037428b",
       "name": "Build Resolved Job Record"
@@ -941,8 +964,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2880,
-        -320
+        3344,
+        -416
       ],
       "id": "2c70e4f2-ce40-4b38-b86f-043c5db62fce",
       "name": "Find Sponsor Entity Mapping",
@@ -961,8 +984,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3136,
-        -336
+        3536,
+        -400
       ],
       "id": "1220a4d2-1a7a-4865-8e0b-70fc8f38a809",
       "name": "Attach Sponsor Entity Mapping"
@@ -1005,8 +1028,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        3344,
-        -336
+        3712,
+        -368
       ],
       "id": "08f292df-abfa-4a53-bf61-9802bb2179c1",
       "name": "Route Sponsor Entity Mapping"
@@ -1178,8 +1201,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3552,
-        -240
+        3952,
+        -256
       ],
       "id": "30dfb21a-5f4a-4089-9128-fb60c5494410",
       "name": "Append row in sheet1",
@@ -1198,8 +1221,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4128,
-        -352
+        4432,
+        -400
       ],
       "id": "c4f285f7-99c6-490e-b30e-afbbcadf6bf9",
       "name": "Parse MyVisaJobs Employer Result"
@@ -1212,8 +1235,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4336,
-        -352
+        4640,
+        -384
       ],
       "id": "72872c8d-b9d5-46ef-a5f4-c2e8d5b68260",
       "name": "Classify Sponsor History"
@@ -1305,8 +1328,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        4576,
-        -352
+        4896,
+        -400
       ],
       "id": "3a674deb-2bb3-4a22-a1a0-f7e83f66588a",
       "name": "Sponsor Route History"
@@ -1319,11 +1342,83 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4928,
-        -336
+        1792,
+        -304
       ],
       "id": "bf67b771-3bc0-41c1-b724-b69e363e936d",
       "name": "Classify Job Sponsorship Language"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const descriptionHtml =\n  $json.job?.job_information?.description ?? '';\n\nconst descriptionText = descriptionHtml\n  .replace(/<br\\s*\\/?>/gi, '\\n')\n  .replace(/<\\/(p|li|div|h[1-6]|ul|ol)>/gi, '\\n')\n  .replace(/<li[^>]*>/gi, '- ')\n  .replace(/<[^>]+>/g, '')\n  .replace(/&nbsp;/g, ' ')\n  .replace(/&amp;/g, '&')\n  .replace(/&lt;/g, '<')\n  .replace(/&gt;/g, '>')\n  .replace(/&quot;/g, '\"')\n  .replace(/&#39;/g, \"'\")\n  .replace(/\\n[ \\t]+/g, '\\n')\n  .replace(/\\n{3,}/g, '\\n\\n')\n  .trim();\n\nreturn {\n  json: {\n    ...$json,\n    descriptionHtml,\n    descriptionText,\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        -304
+      ],
+      "id": "3929cf47-a97c-4e7d-963d-cfa59c446d13",
+      "name": "Normalize Description"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.job_sponsorship.status }}",
+                    "rightValue": "EXPLICIT_NO_SPONSORSHIP",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "be421c8f-f6aa-49eb-9910-4ef2598bb29b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "No Sponsorship"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2016,
+        -320
+      ],
+      "id": "e6542fa6-7c76-4340-ac55-7a698c16b685",
+      "name": "Route Job Sponsorship Language"
+    },
+    {
+      "parameters": {
+        "content": "Discard this job.",
+        "height": 80,
+        "width": 160
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        -400
+      ],
+      "id": "8d481726-0db3-4302-a571-ceacf9c70275",
+      "name": "Sticky Note"
     }
   ],
   "pinData": {},
@@ -1347,6 +1442,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-08-11T18:45:43.499Z",
-  "versionId": "e8510386-48be-4140-ad02-47cdc1edf7ad"
+  "updatedAt": "2026-08-12T01:38:32.331Z",
+  "versionId": "22ba6bae-09c0-49d6-a77e-fa2dda1f0e2d"
 }
