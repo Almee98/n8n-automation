@@ -195,7 +195,7 @@
       "main": [
         [
           {
-            "node": "Get many rows",
+            "node": "Find Sponsor Entity in Supabase",
             "type": "main",
             "index": 0
           }
@@ -454,18 +454,18 @@
         ]
       ]
     },
-    "Get many rows": {
+    "Find Sponsor Entity in Supabase": {
       "main": [
         [
           {
-            "node": "Code in JavaScript",
+            "node": "Attach Sponsor Entity",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Code in JavaScript": {
+    "Attach Sponsor Entity": {
       "main": [
         [
           {
@@ -603,8 +603,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6688,
-        272
+        7216,
+        -432
       ],
       "id": "c43d4446-e4ec-47b1-a383-7e365aa9fc37",
       "name": "Prepare Sponsor Search"
@@ -617,8 +617,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        6912,
-        272
+        7440,
+        -432
       ],
       "id": "77bcc9d5-12cf-4603-8b39-8e4b9512a360",
       "name": "Search MyVisaJobs Employer"
@@ -659,7 +659,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        2256,
+        2208,
         -48
       ],
       "id": "d42f06f1-2d00-4834-97ec-58ae138a9837",
@@ -833,8 +833,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        3488,
-        -368
+        2288,
+        1008
       ],
       "id": "2c70e4f2-ce40-4b38-b86f-043c5db62fce",
       "name": "Find Sponsor Entity Mapping",
@@ -884,8 +884,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        5984,
-        320
+        6512,
+        -384
       ],
       "id": "08f292df-abfa-4a53-bf61-9802bb2179c1",
       "name": "Route Sponsor Entity Mapping"
@@ -898,8 +898,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        7136,
-        272
+        7664,
+        -432
       ],
       "id": "c4f285f7-99c6-490e-b30e-afbbcadf6bf9",
       "name": "Parse MyVisaJobs Employer Result"
@@ -912,8 +912,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        7360,
-        272
+        7888,
+        -432
       ],
       "id": "72872c8d-b9d5-46ef-a5f4-c2e8d5b68260",
       "name": "Classify Sponsor History"
@@ -1005,8 +1005,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        7584,
-        256
+        8112,
+        -448
       ],
       "id": "3a674deb-2bb3-4a22-a1a0-f7e83f66588a",
       "name": "Sponsor Route History"
@@ -1014,7 +1014,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const text = String($json.descriptionText ?? '')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\nconst noSponsorshipPatterns = [\n  /(?:does not|doesn't|do not|don't|will not|won't|cannot|can't)\\s+(?:provide|offer|support)?\\s*(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /no\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /without\\s+(?:current or future\\s+)?(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /not\\s+(?:eligible|available)\\s+for\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /must\\s+(?:be\\s+)?(?:currently\\s+)?authorized\\s+to\\s+work\\s+in\\s+the\\s+(?:u\\.?s\\.?|united states)\\s+without\\s+(?:current or future\\s+)?sponsorship/i,\n\n  /unable\\s+to\\s+(?:provide|offer|support)\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n];\n\nconst sponsorshipAvailablePatterns = [\n  /visa\\s+sponsorship\\s+(?:is\\s+)?available/i,\n  /sponsorship\\s+(?:is\\s+)?available/i,\n  /we\\s+(?:provide|offer|support)\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n];\n\nconst noMatches = noSponsorshipPatterns\n  .filter(pattern => pattern.test(text))\n  .map(pattern => pattern.source);\n\nconst yesMatches = sponsorshipAvailablePatterns\n  .filter(pattern => pattern.test(text))\n  .map(pattern => pattern.source);\n\nlet status = 'NOT_STATED';\n\nif (noMatches.length > 0 && yesMatches.length > 0) {\n  status = 'AMBIGUOUS';\n} else if (noMatches.length > 0) {\n  status = 'EXPLICIT_NO_SPONSORSHIP';\n} else if (yesMatches.length > 0) {\n  status = 'EXPLICIT_SPONSORSHIP_AVAILABLE';\n}\n\nreturn {\n  json: {\n    ...$json,\n\n    job_sponsorship: {\n      status,\n      explicitRestrictionFound: status === 'EXPLICIT_NO_SPONSORSHIP',\n      explicitAvailabilityFound:\n        status === 'EXPLICIT_SPONSORSHIP_AVAILABLE',\n      matchedNoSponsorshipPatterns: noMatches,\n      matchedSponsorshipAvailablePatterns: yesMatches,\n    },\n  },\n};"
+        "jsCode": "const text = String($json.descriptionText ?? '')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\nconst noSponsorshipPatterns = [\n  /(?:does not|doesn't|do not|don't|will not|won't|cannot|can't)\\s+(?:provide|offer|support)?\\s*(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /(?:does not|doesn't|do not|don't|will not|won't|cannot|can't)\\s+sponsor(?:ship)?/i,\n\n  /no\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /without\\s+(?:the\\s+)?(?:need\\s+for\\s+)?(?:employer\\s+)?(?:current or future\\s+)?(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /not\\s+(?:eligible|available)\\s+for\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n\n  /not\\s+considering\\s+(?:applicants?|candidates?)[\\s\\S]{0,80}?sponsorship/i,\n\n  /must\\s+(?:be\\s+)?(?:legally\\s+)?(?:currently\\s+)?authorized\\s+to\\s+work\\s+in\\s+the\\s+(?:u\\.?s\\.?|united states)[\\s\\S]{0,80}?without[\\s\\S]{0,60}?sponsorship/i,\n\n  /(?:unable|not\\s+able)\\s+to\\s+(?:provide|offer|support)\\s+[\\s\\S]{0,60}?sponsorship/i,\n];\n\nconst sponsorshipAvailablePatterns = [\n  /visa\\s+sponsorship\\s+(?:is\\s+)?available/i,\n  /sponsorship\\s+(?:is\\s+)?available/i,\n  /we\\s+(?:provide|offer|support)\\s+(?:employment|visa|immigration)?\\s*sponsorship/i,\n];\n\nconst noMatches = noSponsorshipPatterns\n  .filter(pattern => pattern.test(text))\n  .map(pattern => pattern.source);\n\nconst yesMatches = sponsorshipAvailablePatterns\n  .filter(pattern => pattern.test(text))\n  .map(pattern => pattern.source);\n\nlet status = 'NOT_STATED';\n\nif (noMatches.length > 0 && yesMatches.length > 0) {\n  status = 'AMBIGUOUS';\n} else if (noMatches.length > 0) {\n  status = 'EXPLICIT_NO_SPONSORSHIP';\n} else if (yesMatches.length > 0) {\n  status = 'EXPLICIT_SPONSORSHIP_AVAILABLE';\n}\n\nreturn {\n  json: {\n    ...$json,\n\n    job_sponsorship: {\n      status,\n      explicitRestrictionFound: status === 'EXPLICIT_NO_SPONSORSHIP',\n      explicitAvailabilityFound:\n        status === 'EXPLICIT_SPONSORSHIP_AVAILABLE',\n      matchedNoSponsorshipPatterns: noMatches,\n      matchedSponsorshipAvailablePatterns: yesMatches,\n    },\n  },\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1028,7 +1028,7 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const descriptionHtml =\n  $json.job?.job_information?.description ?? '';\n\nconst descriptionText = descriptionHtml\n  .replace(/<br\\s*\\/?>/gi, '\\n')\n  .replace(/<\\/(p|li|div|h[1-6]|ul|ol)>/gi, '\\n')\n  .replace(/<li[^>]*>/gi, '- ')\n  .replace(/<[^>]+>/g, '')\n  .replace(/&nbsp;/g, ' ')\n  .replace(/&amp;/g, '&')\n  .replace(/&lt;/g, '<')\n  .replace(/&gt;/g, '>')\n  .replace(/&quot;/g, '\"')\n  .replace(/&#39;/g, \"'\")\n  .replace(/\\n[ \\t]+/g, '\\n')\n  .replace(/\\n{3,}/g, '\\n\\n')\n  .trim();\n\nreturn {\n  json: {\n    ...$json,\n    descriptionHtml,\n    descriptionText,\n  },\n};"
+        "jsCode": "function maybeDecode(value) {\n  const raw = String(value ?? '');\n  if (!/%[0-9A-Fa-f]{2}/.test(raw)) {\n    return raw;\n  }\n\n  try {\n    return decodeURIComponent(raw.replace(/\\+/g, '%20'));\n  } catch (error) {\n    return raw;\n  }\n}\n\nconst descriptionHtml = maybeDecode(\n  $json.job?.job_information?.description ?? ''\n);\n\nconst descriptionText = descriptionHtml\n  .replace(/<br\\s*\\/?>/gi, '\\n')\n  .replace(/<\\/(p|li|div|h[1-6]|ul|ol)>/gi, '\\n')\n  .replace(/<li[^>]*>/gi, '- ')\n  .replace(/<[^>]+>/g, '')\n  .replace(/&nbsp;/g, ' ')\n  .replace(/&amp;/g, '&')\n  .replace(/&lt;/g, '<')\n  .replace(/&gt;/g, '>')\n  .replace(/&quot;/g, '\"')\n  .replace(/&#39;/g, \"'\")\n  .replace(/\\n[ \\t]+/g, '\\n')\n  .replace(/\\n{3,}/g, '\\n\\n')\n  .trim();\n\nreturn {\n  json: {\n    ...$json,\n    descriptionHtml,\n    descriptionText,\n  },\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1106,8 +1106,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        8016,
-        368
+        8544,
+        -336
       ],
       "id": "06738918-bc29-481d-b0f4-7bf17fecd47f",
       "name": "Sticky Note1"
@@ -1279,8 +1279,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        6208,
-        416
+        6736,
+        -288
       ],
       "id": "30dfb21a-5f4a-4089-9128-fb60c5494410",
       "name": "Manual Employer Review",
@@ -1513,8 +1513,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2992,
-        336
+        3520,
+        -368
       ],
       "id": "c5682dea-9f9e-4fa2-9545-4a95a6d57fcc",
       "name": "Attach Company Record"
@@ -1580,8 +1580,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        3200,
-        336
+        3728,
+        -368
       ],
       "id": "01776637-e136-4899-97f3-75b1573da949",
       "name": "Route Company Record"
@@ -1593,8 +1593,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3408,
-        432
+        3936,
+        -272
       ],
       "id": "1c103981-a139-4fde-8e17-a6e2ea793a01",
       "name": "Prepare New Companies"
@@ -1618,8 +1618,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        3616,
-        432
+        4144,
+        -272
       ],
       "id": "366bc486-fa87-4fac-aab8-ed6592e2b65a",
       "name": "Create a row",
@@ -1637,8 +1637,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3824,
-        432
+        4352,
+        -272
       ],
       "id": "ebd2557f-a759-4d63-a0d5-2c1ab8fc1688",
       "name": "Attach Created Company Records"
@@ -1661,8 +1661,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        4272,
-        304
+        4800,
+        -400
       ],
       "id": "c8ca1653-dc37-4d77-a91d-d9d2467a160d",
       "name": "Find Job in Supabase",
@@ -1682,8 +1682,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4080,
-        304
+        4608,
+        -400
       ],
       "id": "f8c65a9a-0a20-42ea-a7dc-e62bce162eef",
       "name": "Prepare Job for Supabase"
@@ -1695,8 +1695,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4480,
-        304
+        5008,
+        -400
       ],
       "id": "3dc1ca59-63b4-4052-bb6a-3a1acd112ea0",
       "name": "Attach Job Record"
@@ -1762,8 +1762,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        4688,
-        304
+        5216,
+        -400
       ],
       "id": "954b0fe4-d47d-497b-9185-9821f3e6a9d3",
       "name": "Route Job Record"
@@ -1835,8 +1835,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        4896,
-        208
+        5424,
+        -496
       ],
       "id": "6a80d2da-f01a-455a-9c2f-71bd7dc0974e",
       "name": "Create Job in Supabase",
@@ -1854,8 +1854,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5104,
-        208
+        5632,
+        -496
       ],
       "id": "e43b10e0-4b3b-4ecc-a758-c073ae7fb57c",
       "name": "Attach Created Job Record"
@@ -1883,8 +1883,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        5552,
-        320
+        6080,
+        -384
       ],
       "id": "720b66db-c533-4846-91fb-31bdc56b90d5",
       "name": "Find Sponsor Entity Mapping in Supabase",
@@ -1903,8 +1903,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3712,
-        -368
+        2512,
+        1008
       ],
       "id": "1220a4d2-1a7a-4865-8e0b-70fc8f38a809",
       "name": "Attach Sponsor Entity Mapping [Legacy Sheets]"
@@ -1916,8 +1916,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5760,
-        320
+        6288,
+        -384
       ],
       "id": "9bd57b79-1668-40f0-b9a8-56280ff60d91",
       "name": "Attach Sponsor Entity Mapping"
@@ -1929,8 +1929,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5344,
-        320
+        5872,
+        -384
       ],
       "id": "78076a80-40ef-4afe-8e71-9fea09336738",
       "name": "Canonical Jobs for Sponsor"
@@ -1952,11 +1952,11 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        6224,
-        224
+        6752,
+        -480
       ],
       "id": "60dda060-a5d8-4e5f-b6ae-1cb4d3b4c590",
-      "name": "Get many rows",
+      "name": "Find Sponsor Entity in Supabase",
       "alwaysOutputData": true,
       "credentials": {
         "supabaseApi": {
@@ -1967,16 +1967,16 @@
     },
     {
       "parameters": {
-        "jsCode": "const job = $('Attach Sponsor Entity Mapping').item.json;\n\nconst entityRows = $input.all()\n  .map((item) => item.json)\n  .filter((row) => row && row.id);\n\nconst wantedId = job.sponsor_entity_mapping?.sponsor_entity_id;\nconst sponsorEntity =\n  entityRows.find((row) => row.id === wantedId) ?? null;\n\nif (!sponsorEntity) {\n  throw new Error(\n    `No sponsor_entities row for sponsor_entity_id=${wantedId} (job ${job.id})`\n  );\n}\n\nreturn {\n  json: {\n    ...job,\n    sponsor_entity: sponsorEntity,\n  },\n};"
+        "jsCode": "function getVerifiedJobs() {\n  try {\n    return $('Route Sponsor Entity Mapping').all(0, $runIndex);\n  } catch (error) {\n    return $('Route Sponsor Entity Mapping').all(0);\n  }\n}\n\nconst jobs = getVerifiedJobs().map(item => item.json);\n\nconst entityRows = $input.all()\n  .map(item => item.json)\n  .filter(row => row && row.id);\n\nconst entityById = new Map();\n\nfor (const row of entityRows) {\n  entityById.set(row.id, row);\n}\n\nreturn jobs.map(job => {\n  const wantedId = job.sponsor_entity_mapping?.sponsor_entity_id ?? null;\n  const sponsorEntity = wantedId ? (entityById.get(wantedId) ?? null) : null;\n\n  if (!sponsorEntity) {\n    throw new Error(\n      `No sponsor_entities row for sponsor_entity_id=${wantedId} (job ${job.id})`\n    );\n  }\n\n  return {\n    json: {\n      ...job,\n      sponsor_entity: sponsorEntity,\n    },\n  };\n});"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        6432,
-        224
+        6960,
+        -480
       ],
       "id": "9a94a795-7d56-4b23-9e0a-5d97f17e574e",
-      "name": "Code in JavaScript"
+      "name": "Attach Sponsor Entity"
     }
   ],
   "pinData": {},
@@ -2000,6 +2000,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-08-13T02:08:33.370Z",
-  "versionId": "32631c65-abba-422e-ac52-770e9ed10be7"
+  "updatedAt": "2026-08-13T12:28:28.763Z",
+  "versionId": "bd9cfb09-eb73-4a22-9e86-81fc942321f1"
 }
