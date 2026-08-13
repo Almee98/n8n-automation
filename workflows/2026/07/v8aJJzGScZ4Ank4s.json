@@ -195,7 +195,7 @@
       "main": [
         [
           {
-            "node": "Prepare Sponsor Search",
+            "node": "Get many rows",
             "type": "main",
             "index": 0
           }
@@ -387,7 +387,7 @@
         ],
         [
           {
-            "node": "Find Sponsor Entity Mapping in Supabase",
+            "node": "Canonical Jobs for Sponsor",
             "type": "main",
             "index": 0
           }
@@ -409,7 +409,7 @@
       "main": [
         [
           {
-            "node": "Find Sponsor Entity Mapping in Supabase",
+            "node": "Canonical Jobs for Sponsor",
             "type": "main",
             "index": 0
           }
@@ -429,6 +429,11 @@
     },
     "Attach Sponsor Entity Mapping [Legacy Sheets]": {
       "main": [
+        []
+      ]
+    },
+    "Attach Sponsor Entity Mapping": {
+      "main": [
         [
           {
             "node": "Route Sponsor Entity Mapping",
@@ -438,9 +443,37 @@
         ]
       ]
     },
-    "Attach Sponsor Entity Mapping": {
+    "Canonical Jobs for Sponsor": {
       "main": [
-        []
+        [
+          {
+            "node": "Find Sponsor Entity Mapping in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Prepare Sponsor Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
@@ -565,13 +598,13 @@
     {
       "parameters": {
         "mode": "runOnceForEachItem",
-        "jsCode": "const sponsorEntityName = String(\n  $json.sponsor_entity_mapping?.['Verified Sponsor Entity Name'] ?? ''\n).trim();\n\nif (!sponsorEntityName) {\n  throw new Error('No verified sponsor entity available for sponsor search.');\n}\n\nreturn {\n  json: {\n    ...$json,\n    sponsorSearchTerm: sponsorEntityName,\n  },\n};"
+        "jsCode": "const sponsorEntityName = String(\n  $json.sponsor_entity?.myvisajobs_name ??\n    $json.sponsor_entity?.legal_name ??\n    ''\n).trim();\n\nif (!sponsorEntityName) {\n  throw new Error('No verified sponsor entity available for sponsor search.');\n}\n\nreturn {\n  json: {\n    ...$json,\n    sponsorSearchTerm: sponsorEntityName,\n  },\n};"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4160,
-        -464
+        6688,
+        272
       ],
       "id": "c43d4446-e4ec-47b1-a383-7e365aa9fc37",
       "name": "Prepare Sponsor Search"
@@ -584,8 +617,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        4384,
-        -464
+        6912,
+        272
       ],
       "id": "77bcc9d5-12cf-4603-8b39-8e4b9512a360",
       "name": "Search MyVisaJobs Employer"
@@ -851,8 +884,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        3936,
-        -368
+        5984,
+        320
       ],
       "id": "08f292df-abfa-4a53-bf61-9802bb2179c1",
       "name": "Route Sponsor Entity Mapping"
@@ -865,8 +898,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4608,
-        -464
+        7136,
+        272
       ],
       "id": "c4f285f7-99c6-490e-b30e-afbbcadf6bf9",
       "name": "Parse MyVisaJobs Employer Result"
@@ -879,8 +912,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        4832,
-        -464
+        7360,
+        272
       ],
       "id": "72872c8d-b9d5-46ef-a5f4-c2e8d5b68260",
       "name": "Classify Sponsor History"
@@ -972,8 +1005,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        5056,
-        -480
+        7584,
+        256
       ],
       "id": "3a674deb-2bb3-4a22-a1a0-f7e83f66588a",
       "name": "Sponsor Route History"
@@ -1073,8 +1106,8 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        5488,
-        -368
+        8016,
+        368
       ],
       "id": "06738918-bc29-481d-b0f4-7bf17fecd47f",
       "name": "Sticky Note1"
@@ -1246,8 +1279,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        4160,
-        -272
+        6208,
+        416
       ],
       "id": "30dfb21a-5f4a-4089-9128-fb60c5494410",
       "name": "Manual Employer Review",
@@ -1838,6 +1871,11 @@
               "keyName": "mapping_status",
               "condition": "eq",
               "keyValue": "Verified"
+            },
+            {
+              "keyName": "company_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.company_id }}"
             }
           ]
         }
@@ -1845,7 +1883,7 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        5264,
+        5552,
         320
       ],
       "id": "720b66db-c533-4846-91fb-31bdc56b90d5",
@@ -1873,16 +1911,72 @@
     },
     {
       "parameters": {
-        "jsCode": "const sourceJobs = [\n  ...$('Attach Job Record')\n    .all()\n    .map(item => item.json)\n    .filter(job => job.hasJobRecord),\n\n  ...$('Attach Created Job Record')\n    .all()\n    .map(item => item.json),\n];\n\n// Remove duplicate jobs in case one of the branches contributes\n// something already represented above.\nconst jobsById = new Map();\n\nfor (const job of sourceJobs) {\n  jobsById.set(job.id, job);\n}\n\nconst jobs = Array.from(jobsById.values());\n\n// Ignore {} produced by Always Output Data\nconst mappingRows = $input.all()\n  .map(item => item.json)\n  .filter(row => row && row.id && row.company_id);\n\n// A company may eventually have more than one mapping.\nconst mappingsByCompanyId = new Map();\n\nfor (const mapping of mappingRows) {\n  const existing =\n    mappingsByCompanyId.get(mapping.company_id) ?? [];\n\n  existing.push(mapping);\n\n  mappingsByCompanyId.set(\n    mapping.company_id,\n    existing\n  );\n}\n\nreturn jobs.map(job => {\n  const mappings =\n    mappingsByCompanyId.get(job.company_id) ?? [];\n\n  return {\n    json: {\n      ...job,\n\n      sponsor_entity_mappings: mappings,\n\n      sponsor_entity_mapping_count:\n        mappings.length,\n\n      sponsor_entity_mapping:\n        mappings.length === 1\n          ? mappings[0]\n          : null,\n\n      hasUniqueSponsorEntityMapping:\n        mappings.length === 1,\n    },\n  };\n});"
+        "jsCode": "function getCanonicalJobs() {\n  try {\n    return $('Canonical Jobs for Sponsor').all(0, $runIndex);\n  } catch (error) {\n    return $('Canonical Jobs for Sponsor').all();\n  }\n}\n\nconst jobs = getCanonicalJobs().map(item => item.json);\n\nconst mappingRows = $input.all()\n  .map(item => item.json)\n  .filter(row => row && row.id && row.company_id);\n\nconst mappingsByCompanyId = new Map();\n\nfor (const mapping of mappingRows) {\n  const existing = mappingsByCompanyId.get(mapping.company_id) ?? [];\n  existing.push(mapping);\n  mappingsByCompanyId.set(mapping.company_id, existing);\n}\n\nreturn jobs.map(job => {\n  const mappings = mappingsByCompanyId.get(job.company_id) ?? [];\n  const hasUnique = mappings.length === 1;\n\n  return {\n    json: {\n      ...job,\n      sponsor_entity_mappings: mappings,\n      sponsor_entity_mapping_count: mappings.length,\n      sponsor_entity_mapping: hasUnique ? mappings[0] : null,\n      hasUniqueSponsorEntityMapping: hasUnique,\n      hasSponsorEntityMapping: hasUnique,\n    },\n  };\n});"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5472,
+        5760,
         320
       ],
       "id": "9bd57b79-1668-40f0-b9a8-56280ff60d91",
       "name": "Attach Sponsor Entity Mapping"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jobs = $input.all().map(item => item.json);\n\nfor (const job of jobs) {\n  if (!job?.id) {\n    throw new Error('Canonical job missing id');\n  }\n  if (!job?.company_id) {\n    throw new Error(`Canonical job ${job.id} missing company_id`);\n  }\n}\n\nreturn jobs.map((job) => ({\n  json: {\n    ...job,\n    // explicit contract markers (optional but useful while learning)\n    ready_for_sponsor_processing: true,\n  },\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5344,
+        320
+      ],
+      "id": "78076a80-40ef-4afe-8e71-9fea09336738",
+      "name": "Canonical Jobs for Sponsor"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "sponsor_entities",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.sponsor_entity_mapping.sponsor_entity_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        6224,
+        224
+      ],
+      "id": "60dda060-a5d8-4e5f-b6ae-1cb4d3b4c590",
+      "name": "Get many rows",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const job = $('Attach Sponsor Entity Mapping').item.json;\n\nconst entityRows = $input.all()\n  .map((item) => item.json)\n  .filter((row) => row && row.id);\n\nconst wantedId = job.sponsor_entity_mapping?.sponsor_entity_id;\nconst sponsorEntity =\n  entityRows.find((row) => row.id === wantedId) ?? null;\n\nif (!sponsorEntity) {\n  throw new Error(\n    `No sponsor_entities row for sponsor_entity_id=${wantedId} (job ${job.id})`\n  );\n}\n\nreturn {\n  json: {\n    ...job,\n    sponsor_entity: sponsorEntity,\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6432,
+        224
+      ],
+      "id": "9a94a795-7d56-4b23-9e0a-5d97f17e574e",
+      "name": "Code in JavaScript"
     }
   ],
   "pinData": {},
@@ -1906,6 +2000,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-08-12T21:35:03.404Z",
-  "versionId": "1de3562f-2de2-4230-b70e-3525925a7d1e"
+  "updatedAt": "2026-08-13T02:08:33.370Z",
+  "versionId": "32631c65-abba-422e-ac52-770e9ed10be7"
 }
