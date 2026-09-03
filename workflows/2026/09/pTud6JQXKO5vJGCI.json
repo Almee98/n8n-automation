@@ -1,0 +1,842 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Read Sponsor Entity Review Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Complete Sponsor Decisions": {
+      "main": [
+        [
+          {
+            "node": "Deduplicate By Company Identity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Sponsor Entity Review Queue": {
+      "main": [
+        [
+          {
+            "node": "Keep Complete Sponsor Decisions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deduplicate By Company Identity": {
+      "main": [
+        [
+          {
+            "node": "Find Company in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Company in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Attach Company Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Company Record": {
+      "main": [
+        [
+          {
+            "node": "Route Company Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Company Record": {
+      "main": [
+        [
+          {
+            "node": "Find Sponsor Entity in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Sponsor Entity in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Attach Sponsor Entity Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Sponsor Entity Record": {
+      "main": [
+        [
+          {
+            "node": "Route Sponsor Entity Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Sponsor Entity Record": {
+      "main": [
+        [
+          {
+            "node": "Canonical Sponsor Entity",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare New Sponsor Entities",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare New Sponsor Entities": {
+      "main": [
+        [
+          {
+            "node": "Create Sponsor Entity in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Sponsor Entity in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Attach Created Sponsor Entity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Created Sponsor Entity": {
+      "main": [
+        [
+          {
+            "node": "Canonical Sponsor Entity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Canonical Sponsor Entity": {
+      "main": [
+        [
+          {
+            "node": "Find Sponsor Entity Mapping in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Sponsor Entity Mapping in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Attach Sponsor Entity Mapping Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Sponsor Entity Mapping Record": {
+      "main": [
+        [
+          {
+            "node": "Route Sponsor Entity Mapping Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Sponsor Entity Mapping Record": {
+      "main": [
+        [
+          {
+            "node": "Canonical Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare New Mappings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare New Mappings": {
+      "main": [
+        [
+          {
+            "node": "Create Sponsor Entity Mapping in Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Sponsor Entity Mapping in Supabase": {
+      "main": [
+        [
+          {
+            "node": "Attach Created Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attach Created Mapping": {
+      "main": [
+        [
+          {
+            "node": "Canonical Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-09-01T02:08:04.698Z",
+  "id": "pTud6JQXKO5vJGCI",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Sync Sponsor Entity Review",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -80
+      ],
+      "id": "35137570-4e7a-4939-a79a-9dcd4c8532a7",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst kept = $input.all()\n  .map((item) => item.json)\n  .filter((row) => {\n    const status = text(row['Review Status']);\n    const name = text(row['Verified Sponsor Entity Name']);\n    return status === 'Verified' && name.length > 0;\n  })\n  .map((row) => ({ json: row }));\n\nreturn kept;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        -80
+      ],
+      "id": "02e6a99f-ec23-4207-b6a0-4734ec867251",
+      "name": "Keep Complete Sponsor Decisions"
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nfunction normalize(value) {\n  return text(value).toLowerCase();\n}\n\nconst byCompany = new Map();\n\nfor (const item of $input.all()) {\n  const row = item.json;\n  const key = normalize(row['Company Identity']);\n  if (!key) continue;\n\n  if (!byCompany.has(key)) {\n    byCompany.set(key, row);\n  }\n}\n\nreturn Array.from(byCompany.values()).map((row) => ({ json: row }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        -80
+      ],
+      "id": "ca737aca-1c1d-4e26-9a07-0b2ee27f4e7f",
+      "name": "Deduplicate By Company Identity"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1788003007,
+          "mode": "list",
+          "cachedResultName": "Sponsor Entity Review Queue",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1788003007"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -48,
+        -80
+      ],
+      "id": "888be479-931a-43ff-8d2b-7ba4fae07ca8",
+      "name": "Read Sponsor Entity Review Queue",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "companies",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "identity_name",
+              "condition": "eq",
+              "keyValue": "={{ $json['Company Identity'] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        576,
+        -80
+      ],
+      "id": "df459e6e-7fa9-4111-bba3-1cea8f124855",
+      "name": "Find Company in Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function getSheetRows() {\n  try {\n    return $('Deduplicate By Company Identity').all(0, $runIndex);\n  } catch (error) {\n    return $('Deduplicate By Company Identity').all();\n  }\n}\n\nfunction text(value) {\n  return String(value ?? '').trim();\n}\n\nfunction normalize(value) {\n  return text(value).toLowerCase();\n}\n\nconst sheetRows = getSheetRows().map((item) => item.json);\n\nconst companyRows = $input.all()\n  .map((item) => item.json)\n  .filter((row) => row && row.id && row.identity_name);\n\nconst companyByName = new Map();\n\nfor (const company of companyRows) {\n  companyByName.set(normalize(company.identity_name), company);\n}\n\nreturn sheetRows.map((row) => {\n  const identityName = text(row['Company Identity']);\n  const companyRecord = companyByName.get(normalize(identityName)) ?? null;\n\n  return {\n    json: {\n      ...row,\n      company_record: companyRecord,\n      company_id: companyRecord?.id ?? null,\n      hasCompanyRecord: Boolean(companyRecord),\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        784,
+        -80
+      ],
+      "id": "4faaeba6-14fa-47d5-9cd7-8e5d1a8ce918",
+      "name": "Attach Company Record"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.hasCompanyRecord }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "f95ea4af-050e-4554-9b2e-8e19247b094a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Existing Company"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "adc91a56-b7ef-4bce-9db6-11a0fae1aba9",
+                    "leftValue": "={{ $json.hasCompanyRecord }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Missing Company"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        992,
+        -80
+      ],
+      "id": "c3f2b76c-5c29-4b67-94a2-57d9f39a53d9",
+      "name": "Route Company Record"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "sponsor_entities",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "legal_name",
+              "condition": "eq",
+              "keyValue": "={{ '\"' + $json['Verified Sponsor Entity Name'] + '\"' }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -176
+      ],
+      "id": "05eb532a-f6f2-4db0-961a-39bb1e078a72",
+      "name": "Find Sponsor Entity in Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function getCompanyRows() {\n  try {\n    return $('Route Company Record').all(0, $runIndex);\n  } catch (error) {\n    return $('Route Company Record').all(0);\n  }\n}\n\nfunction text(value) {\n  return String(value ?? '').trim();\n}\n\nfunction normalize(value) {\n  return text(value).toLowerCase();\n}\n\nconst companyRows = getCompanyRows().map((item) => item.json);\n\nconst entityRows = $input.all()\n  .map((item) => item.json)\n  .filter((row) => row && row.id && row.legal_name);\n\nconst entitiesByName = new Map();\n\nfor (const entity of entityRows) {\n  const key = normalize(entity.legal_name);\n  const existing = entitiesByName.get(key) ?? [];\n  existing.push(entity);\n  entitiesByName.set(key, existing);\n}\n\nreturn companyRows.map((row) => {\n  const legalName = text(row['Verified Sponsor Entity Name']);\n  const matches = entitiesByName.get(normalize(legalName)) ?? [];\n\n  if (matches.length > 1) {\n    throw new Error(\n      `Ambiguous sponsor_entities for \"${legalName}\": ${matches.length} rows. Do not pick the first.`\n    );\n  }\n\n  const sponsorEntity = matches.length === 1 ? matches[0] : null;\n\n  return {\n    json: {\n      ...row,\n      sponsor_entity: sponsorEntity,\n      sponsor_entity_id: sponsorEntity?.id ?? null,\n      hasSponsorEntityRecord: Boolean(sponsorEntity),\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1408,
+        -176
+      ],
+      "id": "e0ccdab7-8419-4350-a5ae-a4148e94db3b",
+      "name": "Attach Sponsor Entity Record"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.hasSponsorEntityRecord }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "dffaf130-162e-40be-a8df-d8ddfea295ea"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Existing Entity"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b72a8294-f180-4445-abdd-1838f277d818",
+                    "leftValue": "={{ $json.hasSponsorEntityRecord }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "New Entity"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1616,
+        -176
+      ],
+      "id": "f70f3ac7-8a75-4589-8dc0-303f8dc4d6be",
+      "name": "Route Sponsor Entity Record"
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nfunction normalize(value) {\n  return text(value).toLowerCase();\n}\n\nfunction pathFromNotes(row) {\n  const url = text(row['Mapping Evidence / Source']) || text(row['Notes']);\n  try {\n    const parsed = new URL(url);\n    if (!parsed.hostname.includes('myvisajobs.com')) return null;\n    return parsed.pathname.replace(/\\/$/, '') || null;\n  } catch (error) {\n    return null;\n  }\n}\n\nconst entities = new Map();\n\nfor (const item of $input.all()) {\n  const row = item.json;\n  const legalName = text(row['Verified Sponsor Entity Name']);\n  if (!legalName) continue;\n\n  const key = normalize(legalName);\n  if (!entities.has(key)) {\n    entities.set(key, {\n      legal_name: legalName,\n      myvisajobs_name: legalName,\n      myvisajobs_path: pathFromNotes(row),\n    });\n  }\n}\n\nreturn Array.from(entities.values()).map((entity) => ({ json: entity }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1824,
+        -80
+      ],
+      "id": "854ac734-3c73-4272-b749-c3874af6aa0f",
+      "name": "Prepare New Sponsor Entities"
+    },
+    {
+      "parameters": {
+        "tableId": "sponsor_entities",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "legal_name",
+              "fieldValue": "={{ $json.legal_name }}"
+            },
+            {
+              "fieldId": "myvisajobs_name",
+              "fieldValue": "={{ $json.myvisajobs_name }}"
+            },
+            {
+              "fieldId": "myvisajobs_path",
+              "fieldValue": "={{ $json.myvisajobs_path }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        -80
+      ],
+      "id": "848f3cbc-215e-4a8e-8a4a-d787eb7ce380",
+      "name": "Create Sponsor Entity in Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nfunction normalize(value) {\n  return text(value).toLowerCase();\n}\n\nconst createdEntities = $input.all()\n  .map((item) => item.json)\n  .filter((row) => row && row.id && row.legal_name);\n\nconst newRows = $('Attach Sponsor Entity Record')\n  .all()\n  .map((item) => item.json)\n  .filter((row) => !row.hasSponsorEntityRecord);\n\nconst entityByName = new Map();\n\nfor (const entity of createdEntities) {\n  entityByName.set(normalize(entity.legal_name), entity);\n}\n\nreturn newRows.map((row) => {\n  const legalName = text(row['Verified Sponsor Entity Name']);\n  const sponsorEntity = entityByName.get(normalize(legalName)) ?? null;\n\n  if (!sponsorEntity) {\n    throw new Error(\n      `Could not attach created sponsor_entities row for \"${legalName}\"`\n    );\n  }\n\n  return {\n    json: {\n      ...row,\n      sponsor_entity: sponsorEntity,\n      sponsor_entity_id: sponsorEntity.id,\n      hasSponsorEntityRecord: true,\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        -80
+      ],
+      "id": "57a6df69-627f-458e-9a66-41b3f2948fd4",
+      "name": "Attach Created Sponsor Entity"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all().map((item) => item.json);\n\nfor (const row of rows) {\n  if (!row.company_id) {\n    throw new Error(`Missing company_id for \"${row['Company Identity']}\"`);\n  }\n  if (!row.sponsor_entity_id) {\n    throw new Error(`Missing sponsor_entity_id for \"${row['Company Identity']}\"`);\n  }\n}\n\nreturn rows.map((row) => ({\n  json: {\n    ...row,\n    ready_for_mapping: true,\n  },\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        -176
+      ],
+      "id": "43e5de6a-e84e-4f74-8ca2-56f6933788e2",
+      "name": "Canonical Sponsor Entity"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "sponsor_entity_mappings",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "company_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.company_id }}"
+            },
+            {
+              "keyName": "mapping_status",
+              "condition": "eq",
+              "keyValue": "Verified"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        -176
+      ],
+      "id": "1f2600dd-2bc9-4742-95c5-762d27939d09",
+      "name": "Find Sponsor Entity Mapping in Supabase",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function getCanonicalRows() {\n  try {\n    return $('Canonical Sponsor Entity').all(0, $runIndex);\n  } catch (error) {\n    return $('Canonical Sponsor Entity').all();\n  }\n}\n\nconst canonicalRows = getCanonicalRows().map((item) => item.json);\n\nconst mappingRows = $input.all()\n  .map((item) => item.json)\n  .filter((row) => row && row.id && row.company_id);\n\nconst mappingsByCompanyId = new Map();\n\nfor (const mapping of mappingRows) {\n  const existing = mappingsByCompanyId.get(mapping.company_id) ?? [];\n  existing.push(mapping);\n  mappingsByCompanyId.set(mapping.company_id, existing);\n}\n\nreturn canonicalRows.map((row) => {\n  const mappings = mappingsByCompanyId.get(row.company_id) ?? [];\n\n  if (mappings.length > 1) {\n    throw new Error(\n      `Ambiguous verified mappings for company_id=${row.company_id}. Do not pick the first.`\n    );\n  }\n\n  const mapping = mappings.length === 1 ? mappings[0] : null;\n\n  return {\n    json: {\n      ...row,\n      sponsor_entity_mapping: mapping,\n      sponsor_entity_mapping_id: mapping?.id ?? null,\n      hasSponsorEntityMappingRecord: Boolean(mapping),\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2848,
+        -176
+      ],
+      "id": "be452440-34c9-4773-ad6b-470eaeb5bc16",
+      "name": "Attach Sponsor Entity Mapping Record"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.hasSponsorEntityMappingRecord }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "b75edba6-02ef-4a9b-be94-b1f697ff0ff2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Existing Mapping"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ecf888fa-1643-4d7a-9bf6-813de80909f4",
+                    "leftValue": "={{ $json.hasSponsorEntityMappingRecord }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "New Mapping"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        3056,
+        -176
+      ],
+      "id": "3071bc96-5247-426a-97f9-0b025fec6805",
+      "name": "Route Sponsor Entity Mapping Record"
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst byCompanyId = new Map();\n\nfor (const item of $input.all()) {\n  const row = item.json;\n  if (!row.company_id || !row.sponsor_entity_id) continue;\n  if (byCompanyId.has(row.company_id)) continue;\n\n  byCompanyId.set(row.company_id, {\n    company_id: row.company_id,\n    sponsor_entity_id: row.sponsor_entity_id,\n    mapping_status: 'Verified',\n    mapping_source: 'manual_review_sheet',\n    mapping_evidence: text(row['Mapping Evidence / Source']) || text(row['Notes']) || null,\n    verified_at: new Date().toISOString(),\n  });\n}\n\nreturn Array.from(byCompanyId.values()).map((mapping) => ({ json: mapping }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3264,
+        -80
+      ],
+      "id": "c781d3f0-56c4-47b0-a6f0-439e73560999",
+      "name": "Prepare New Mappings"
+    },
+    {
+      "parameters": {
+        "tableId": "sponsor_entity_mappings",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "company_id",
+              "fieldValue": "={{ $json.company_id }}"
+            },
+            {
+              "fieldId": "sponsor_entity_id",
+              "fieldValue": "={{ $json.sponsor_entity_id }}"
+            },
+            {
+              "fieldId": "mapping_status",
+              "fieldValue": "={{ $json.mapping_status }}"
+            },
+            {
+              "fieldId": "mapping_source",
+              "fieldValue": "={{ $json.mapping_source }}"
+            },
+            {
+              "fieldId": "mapping_evidence",
+              "fieldValue": "={{ $json.mapping_evidence }}"
+            },
+            {
+              "fieldId": "verified_at",
+              "fieldValue": "={{ $json.verified_at }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3472,
+        -80
+      ],
+      "id": "3867b913-4672-4f3d-bf55-c993c63e7cc3",
+      "name": "Create Sponsor Entity Mapping in Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "Lgy7rtDgGcbRtMBz",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const createdMappings = $input.all()\n  .map((item) => item.json)\n  .filter((row) => row && row.id && row.company_id);\n\nconst newRows = $('Attach Sponsor Entity Mapping Record')\n  .all()\n  .map((item) => item.json)\n  .filter((row) => !row.hasSponsorEntityMappingRecord);\n\nconst mappingByCompanyId = new Map();\n\nfor (const mapping of createdMappings) {\n  mappingByCompanyId.set(mapping.company_id, mapping);\n}\n\nreturn newRows.map((row) => {\n  const mapping = mappingByCompanyId.get(row.company_id) ?? null;\n\n  if (!mapping) {\n    throw new Error(\n      `Could not attach created mapping for company_id=${row.company_id}`\n    );\n  }\n\n  return {\n    json: {\n      ...row,\n      sponsor_entity_mapping: mapping,\n      sponsor_entity_mapping_id: mapping.id,\n      hasSponsorEntityMappingRecord: true,\n    },\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3680,
+        -80
+      ],
+      "id": "ea0d88d8-105a-4f59-80f4-18f28c401d32",
+      "name": "Attach Created Mapping"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all().map((item) => item.json);\n\nfor (const row of rows) {\n  if (!row.company_id) {\n    throw new Error(`Missing company_id for \"${row['Company Identity']}\"`);\n  }\n  if (!row.sponsor_entity_id) {\n    throw new Error(`Missing sponsor_entity_id for \"${row['Company Identity']}\"`);\n  }\n  if (!row.sponsor_entity_mapping_id) {\n    throw new Error(`Missing mapping id for \"${row['Company Identity']}\"`);\n  }\n}\n\nreturn rows.map((row) => ({\n  json: {\n    ...row,\n    mapping_sync_complete: true,\n  },\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3856,
+        -160
+      ],
+      "id": "456606c8-6ebb-42c7-897e-3c48382b23f8",
+      "name": "Canonical Mapping"
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-automation",
+  "repo_owner": "Almee98",
+  "repo_path": "workflows/",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-01T02:08:04.701Z",
+      "createdAt": "2026-09-01T02:08:04.701Z",
+      "role": "workflow:owner",
+      "workflowId": "pTud6JQXKO5vJGCI",
+      "projectId": "6vvj3dOnaSovrQI9"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-09-01T22:59:52.172Z",
+  "versionId": "1ee5b08b-b8d9-4263-8479-64f069617b53"
+}
