@@ -10,19 +10,18 @@
             "node": "Edit Fields",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
     },
     "Edit Fields": {
       "main": [
-        [
-          {
-            "node": "HTTP Request",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "HTTP Request": {
@@ -233,7 +232,13 @@
     },
     "Sponsor Route History": {
       "main": [
-        []
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Classify Job Sponsorship Language": {
@@ -475,6 +480,11 @@
           }
         ]
       ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        []
+      ]
     }
   },
   "createdAt": "2026-07-13T15:24:31.911Z",
@@ -492,7 +502,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        -272
+        -448
       ],
       "id": "7b2d9dec-f506-4ed2-af82-4d3d22c80871",
       "name": "When clicking ‘Execute workflow’"
@@ -1883,8 +1893,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        6080,
-        -384
+        6112,
+        -368
       ],
       "id": "720b66db-c533-4846-91fb-31bdc56b90d5",
       "name": "Find Sponsor Entity Mapping in Supabase",
@@ -1929,8 +1939,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        5872,
-        -384
+        5936,
+        -352
       ],
       "id": "78076a80-40ef-4afe-8e71-9fea09336738",
       "name": "Canonical Jobs for Sponsor"
@@ -1977,6 +1987,183 @@
       ],
       "id": "9a94a795-7d56-4b23-9e0a-5d97f17e574e",
       "name": "Attach Sponsor Entity"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      id: 'successfactors___eu___HCLPRD___134053',\n      company_id: '33ddfc70-9fac-48fa-ab06-e0a026bd4402',\n      company: 'HCLTech',\n      title: 'React.js Technical Specialist - JavaScript, Node.js (134053)',\n      applyUrl:\n        'https://career55.sapsf.eu/career?career_ns=job_listing&company=HCLPRD&career_job_req_id=134053',\n      ready_for_sponsor_processing: true,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5792,
+        -640
+      ],
+      "id": "572efa79-d59b-4f8c-b69e-e979578467cf",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 302849126,
+          "mode": "list",
+          "cachedResultName": "Viable Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=302849126"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Job ID": "={{ $json.id }}",
+            "Job Title": "={{ $json.title }}",
+            "Apply URL": "={{ $json.applyUrl }}",
+            "Company Identity": "={{ $json.company }}",
+            "Verified Sponsor Entity Name": "={{ $json.sponsor_entity?.myvisajobs_name ?? $json.sponsor_entity?.legal_name ?? '' }}",
+            "Matched Employer": "={{ $json.sponsor_history?.matchedEmployer ?? $json.sponsor_lookup?.employerName ?? '' }}",
+            "H-1B Applications": "={{ $json.sponsor_history?.h1bTotalApplications ?? $json.sponsor_lookup?.h1bTotalApplications ?? '' }}",
+            "Visa Rank": "={{ $json.sponsor_history?.visaRank ?? $json.sponsor_lookup?.visaRank ?? '' }}",
+            "Sponsor Search Term": "={{ $json.sponsorSearchTerm ?? '' }}",
+            "MyVisaJobs Path": "={{ $json.sponsor_lookup?.employerPath ?? $json.sponsor_entity?.myvisajobs_path ?? '' }}",
+            "Status": "={{ $json.sponsor_history?.status ?? '' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply URL",
+              "displayName": "Apply URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Identity",
+              "displayName": "Company Identity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Verified Sponsor Entity Name",
+              "displayName": "Verified Sponsor Entity Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Matched Employer",
+              "displayName": "Matched Employer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "H-1B Applications",
+              "displayName": "H-1B Applications",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Visa Rank",
+              "displayName": "Visa Rank",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sponsor Search Term",
+              "displayName": "Sponsor Search Term",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "MyVisaJobs Path",
+              "displayName": "MyVisaJobs Path",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        8320,
+        -535.9906504829884
+      ],
+      "id": "48f9e83a-802a-4241-a94e-35a268f9cb69",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -2000,6 +2187,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-08-13T12:28:28.763Z",
-  "versionId": "bd9cfb09-eb73-4a22-9e86-81fc942321f1"
+  "updatedAt": "2026-09-03T02:04:32.758Z",
+  "versionId": "0d855b03-d300-4711-bd8e-99a808d25fc7"
 }
