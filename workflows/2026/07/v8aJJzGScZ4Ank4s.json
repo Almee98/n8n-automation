@@ -10,18 +10,19 @@
             "node": "Edit Fields",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "Code in JavaScript",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
     },
     "Edit Fields": {
       "main": [
-        []
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "HTTP Request": {
@@ -2154,7 +2155,7 @@
       "typeVersion": 4.7,
       "position": [
         8320,
-        -535.9906504829884
+        -528
       ],
       "id": "48f9e83a-802a-4241-a94e-35a268f9cb69",
       "name": "Append row in sheet",
@@ -2187,6 +2188,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-09-03T02:04:32.758Z",
-  "versionId": "0d855b03-d300-4711-bd8e-99a808d25fc7"
+  "updatedAt": "2026-09-03T02:10:57.556Z",
+  "versionId": "a57def68-2611-400a-892c-d8b11faeb2bb"
 }
