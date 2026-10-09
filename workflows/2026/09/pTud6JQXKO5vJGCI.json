@@ -327,7 +327,7 @@
             {
               "keyName": "identity_name",
               "condition": "eq",
-              "keyValue": "={{ $json['Company Identity'] }}"
+              "keyValue": "={{ '\"' + $json['Company Identity'] + '\"' }}"
             }
           ]
         }
@@ -837,6 +837,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-09-01T22:59:52.172Z",
-  "versionId": "1ee5b08b-b8d9-4263-8479-64f069617b53"
+  "updatedAt": "2026-09-16T23:00:33.594Z",
+  "versionId": "f11bfe31-44b3-4a8b-8c77-f2f7d747dcd0"
 }
