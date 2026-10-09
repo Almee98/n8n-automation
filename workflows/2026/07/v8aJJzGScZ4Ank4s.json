@@ -14,17 +14,6 @@
         ]
       ]
     },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "HTTP Request": {
       "main": [
         [
@@ -38,18 +27,7 @@
     },
     "Limit": {
       "main": [
-        [
-          {
-            "node": "Fetch Full Job Description",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Merge Job Metadata + Description",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Prepare Job Record": {
@@ -149,24 +127,12 @@
     },
     "Parse HiringCafe Search Results": {
       "main": [
-        [
-          {
-            "node": "Limit",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Merge Job Metadata + Description": {
       "main": [
-        [
-          {
-            "node": "Normalize Description",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Build Resolved Job Record": {
@@ -235,7 +201,21 @@
       "main": [
         [
           {
-            "node": "Append row in sheet",
+            "node": "Write Viable Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Write No H-1B Job",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Write Sponsor Lookup Review",
             "type": "main",
             "index": 0
           }
@@ -486,6 +466,39 @@
       "main": [
         []
       ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Fetch HiringCafe Jobs (Apify)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map Apify Jobs": {
+      "main": [
+        [
+          {
+            "node": "Normalize Description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch HiringCafe Jobs (Apify)": {
+      "main": [
+        [
+          {
+            "node": "Map Apify Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-07-13T15:24:31.911Z",
@@ -502,52 +515,11 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        0,
-        -448
+        752,
+        -256
       ],
       "id": "7b2d9dec-f506-4ed2-af82-4d3d22c80871",
       "name": "When clicking ‘Execute workflow’"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "28d214aa-fd3b-4135-b2a0-a3e795db2d5a",
-              "name": "name",
-              "value": "Almee",
-              "type": "string"
-            },
-            {
-              "id": "f17fbeab-3048-4a86-af56-aa77f1038b32",
-              "name": "city",
-              "value": "Long Beach",
-              "type": "string"
-            },
-            {
-              "id": "2ccd1250-94c5-428d-96e9-ab111dfd4649",
-              "name": "url",
-              "value": "https://hiring.cafe/?searchState=%7B%22dateFetchedPastNDays%22%3A2%2C%22departments%22%3A%5B%22Software+Development%22%5D%2C%22roleYoeRange%22%3A%5B0%2C4%5D%2C%22securityClearances%22%3A%5B%22None%22%5D%7D",
-              "type": "string"
-            },
-            {
-              "id": "27d35325-3cea-4952-b7d7-1aa7f945ba40",
-              "name": "sponsorListUrl",
-              "value": "https://www.myvisajobs.com/reports/h1b/",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        224,
-        -272
-      ],
-      "id": "36a15bf8-b859-4890-a741-31c1dfb94060",
-      "name": "Edit Fields"
     },
     {
       "parameters": {
@@ -557,8 +529,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        448,
-        -272
+        352,
+        240
       ],
       "id": "c81f6c6d-cf75-4757-beef-33210bce628e",
       "name": "HTTP Request"
@@ -570,8 +542,8 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        896,
-        -272
+        800,
+        240
       ],
       "id": "874d2f20-7cbc-4574-bbb1-956a96e9c399",
       "name": "Limit"
@@ -599,8 +571,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1120,
-        -192
+        992,
+        224
       ],
       "id": "25508a04-5e32-4fd9-8dbd-8b12fda06aa2",
       "name": "Fetch Full Job Description",
@@ -772,8 +744,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        672,
-        -272
+        576,
+        240
       ],
       "id": "18cb1ba6-bb14-4845-afec-3eb52e1a169d",
       "name": "Parse HiringCafe Search Results"
@@ -795,8 +767,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1344,
-        -272
+        1200,
+        240
       ],
       "id": "34303582-a905-499f-910a-21daca023587",
       "name": "Merge Job Metadata + Description"
@@ -1044,7 +1016,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1568,
+        1632,
         -272
       ],
       "id": "3929cf47-a97c-4e7d-963d-cfa59c446d13",
@@ -1496,7 +1468,7 @@
             {
               "keyName": "identity_name",
               "condition": "eq",
-              "keyValue": "={{ $json.company }}"
+              "keyValue": "={{ '\"' + $json.company + '\"' }}"
             }
           ]
         }
@@ -2154,15 +2126,434 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        8320,
-        -528
+        8384,
+        -624
       ],
       "id": "48f9e83a-802a-4241-a94e-35a268f9cb69",
-      "name": "Append row in sheet",
+      "name": "Write Viable Jobs",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "biSHvFkUNE3Sct76",
           "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1943415705,
+          "mode": "list",
+          "cachedResultName": "No H-1B History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1943415705"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Job ID": "={{ $json.id }}",
+            "Job Title": "={{ $json.title }}",
+            "Apply URL": "={{ $json.applyUrl }}",
+            "Company Identity": "={{ $json.company }}",
+            "Verified Sponsor Entity Name": "={{ $json.sponsor_entity?.myvisajobs_name ?? $json.sponsor_entity?.legal_name ?? '' }}",
+            "Matched Employer": "={{ $json.sponsor_history?.matchedEmployer ?? $json.sponsor_lookup?.employerName ?? '' }}",
+            "H-1B Applications": "={{ $json.sponsor_history?.h1bTotalApplications ?? $json.sponsor_lookup?.h1bTotalApplications ?? '' }}",
+            "Visa Rank": "={{ $json.sponsor_history?.visaRank ?? $json.sponsor_lookup?.visaRank ?? '' }}",
+            "Sponsor Search Term": "={{ $json.sponsorSearchTerm ?? '' }}",
+            "MyVisaJobs Path": "={{ $json.sponsor_lookup?.employerPath ?? $json.sponsor_entity?.myvisajobs_path ?? '' }}",
+            "Status": "={{ $json.sponsor_history?.status ?? '' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply URL",
+              "displayName": "Apply URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Identity",
+              "displayName": "Company Identity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Verified Sponsor Entity Name",
+              "displayName": "Verified Sponsor Entity Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Matched Employer",
+              "displayName": "Matched Employer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "H-1B Applications",
+              "displayName": "H-1B Applications",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Visa Rank",
+              "displayName": "Visa Rank",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sponsor Search Term",
+              "displayName": "Sponsor Search Term",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "MyVisaJobs Path",
+              "displayName": "MyVisaJobs Path",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        8368,
+        -464
+      ],
+      "id": "0ee2ca13-b3df-4c25-8c8c-6f86a5c0671c",
+      "name": "Write No H-1B Job",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1445470867,
+          "mode": "list",
+          "cachedResultName": "Sponsor Lookup Review",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1445470867"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Job ID": "={{ $json.id }}",
+            "Job Title": "={{ $json.title }}",
+            "Apply URL": "={{ $json.applyUrl }}",
+            "Company Identity": "={{ $json.company }}",
+            "Verified Sponsor Entity Name": "={{ $json.sponsor_entity?.myvisajobs_name ?? $json.sponsor_entity?.legal_name ?? '' }}",
+            "Matched Employer": "={{ $json.sponsor_history?.matchedEmployer ?? $json.sponsor_lookup?.employerName ?? '' }}",
+            "H-1B Applications": "={{ $json.sponsor_history?.h1bTotalApplications ?? $json.sponsor_lookup?.h1bTotalApplications ?? '' }}",
+            "Visa Rank": "={{ $json.sponsor_history?.visaRank ?? $json.sponsor_lookup?.visaRank ?? '' }}",
+            "Sponsor Search Term": "={{ $json.sponsorSearchTerm ?? '' }}",
+            "MyVisaJobs Path": "={{ $json.sponsor_lookup?.employerPath ?? $json.sponsor_entity?.myvisajobs_path ?? '' }}",
+            "Status": "={{ $json.sponsor_history?.status ?? '' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply URL",
+              "displayName": "Apply URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Identity",
+              "displayName": "Company Identity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Verified Sponsor Entity Name",
+              "displayName": "Verified Sponsor Entity Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Matched Employer",
+              "displayName": "Matched Employer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "H-1B Applications",
+              "displayName": "H-1B Applications",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Visa Rank",
+              "displayName": "Visa Rank",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sponsor Search Term",
+              "displayName": "Sponsor Search Term",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "MyVisaJobs Path",
+              "displayName": "MyVisaJobs Path",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        8368,
+        -336
+      ],
+      "id": "7ca22769-0b18-4180-81e3-75a6f5b7c25e",
+      "name": "Write Sponsor Lookup Review",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "28d214aa-fd3b-4135-b2a0-a3e795db2d5a",
+              "name": "name",
+              "value": "Almee",
+              "type": "string"
+            },
+            {
+              "id": "f17fbeab-3048-4a86-af56-aa77f1038b32",
+              "name": "city",
+              "value": "Long Beach",
+              "type": "string"
+            },
+            {
+              "id": "2ccd1250-94c5-428d-96e9-ab111dfd4649",
+              "name": "url",
+              "value": "https://hiringcafe.com/?searchState=%7B%22locations%22%3A%5B%7B%22formatted_address%22%3A%22United+States%22%2C%22types%22%3A%5B%22country%22%5D%2C%22geometry%22%3A%7B%22location%22%3A%7B%22lat%22%3A37.7749%2C%22lon%22%3A-122.4194%7D%7D%2C%22id%22%3A%22user_country%22%2C%22address_components%22%3A%5B%7B%22long_name%22%3A%22United+States%22%2C%22short_name%22%3A%22US%22%2C%22types%22%3A%5B%22country%22%5D%7D%5D%2C%22options%22%3A%7B%22flexible_regions%22%3A%5B%22anywhere_in_continent%22%2C%22anywhere_in_world%22%5D%7D%7D%5D%2C%22commitmentTypes%22%3A%5B%22Full+Time%22%5D%2C%22dateFetchedPastNDays%22%3A2%2C%22departments%22%3A%5B%22Software+Development%22%5D%2C%22roleYoeRange%22%3A%5B0%2C4%5D%2C%22seniorityLevel%22%3A%5B%22Entry+Level%22%2C%22Mid+Level%22%5D%2C%22securityClearances%22%3A%5B%22None%22%5D%7D",
+              "type": "string"
+            },
+            {
+              "id": "27d35325-3cea-4952-b7d7-1aa7f945ba40",
+              "name": "sponsorListUrl",
+              "value": "https://www.myvisajobs.com/reports/h1b/",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        976,
+        -256
+      ],
+      "id": "36a15bf8-b859-4890-a741-31c1dfb94060",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "function unflatten(row) {\n  const job_information = {};\n  const v5_processed_job_data = {};\n  const enriched_company_data = {};\n\n  for (const [key, value] of Object.entries(row)) {\n    if (key.startsWith('job_information_')) {\n      job_information[key.slice('job_information_'.length)] = value;\n    } else if (key.startsWith('v5_processed_job_data_')) {\n      v5_processed_job_data[key.slice('v5_processed_job_data_'.length)] = value;\n    } else if (key.startsWith('enriched_company_data_')) {\n      enriched_company_data[key.slice('enriched_company_data_'.length)] = value;\n    }\n  }\n\n  return {\n    json: {\n      ...row,\n      job_information,\n      v5_processed_job_data,\n      enriched_company_data,\n      job: { job_information },\n    },\n  };\n}\n\nreturn $input.all().map((item) => unflatten(item.json));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        -256
+      ],
+      "id": "848735f3-38b8-4f6f-90d2-0ebf3c3490bf",
+      "name": "Map Apify Jobs"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/azzouzana~hiring-cafe-scraper/run-sync-get-dataset-items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "timeout",
+              "value": "120"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"startUrl\": \"{{ $json.url }}\",\n  \"fetchDescriptions\": true,\n  \"maxItems\": 10\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1248,
+        -256
+      ],
+      "id": "02373d93-3e9d-477b-bdeb-4c8aa335a5ef",
+      "name": "Fetch HiringCafe Jobs (Apify)",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "DMs0gAb1Ioe0qcpM",
+          "name": "Bearer Auth account"
         }
       }
     }
@@ -2188,6 +2579,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-09-03T02:10:57.556Z",
-  "versionId": "a57def68-2611-400a-892c-d8b11faeb2bb"
+  "updatedAt": "2026-09-16T03:34:06.412Z",
+  "versionId": "a8e30c56-e0be-4cbc-93a4-f179b2aaf0ab"
 }
