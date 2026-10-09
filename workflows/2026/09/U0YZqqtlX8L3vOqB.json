@@ -1,0 +1,371 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Start Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Digest": {
+      "main": [
+        [
+          {
+            "node": "Read Viable",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Lookup",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read Sponsor",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read No H-1B",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Sponsor": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Read Lookup": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Read Viable": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read No H-1B": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Build Digest Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Digest Email": {
+      "main": [
+        [
+          {
+            "node": "Send Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-09-16T22:25:26.619Z",
+  "id": "U0YZqqtlX8L3vOqB",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Morning Job Digest",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -560,
+        -48
+      ],
+      "id": "250d4eac-6e90-4ac5-ad40-f5dfc16b6600",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "19f42c29-8965-4cb2-86b5-9ab05b35b0e6",
+              "name": "digestRun",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -352,
+        -48
+      ],
+      "id": "80ee0b77-44f1-4345-91d5-f73df50a0931",
+      "name": "Start Digest"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 302849126,
+          "mode": "list",
+          "cachedResultName": "Viable Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=302849126"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -112,
+        -384
+      ],
+      "id": "1239c650-ff81-4cf6-912b-8db0c10b555f",
+      "name": "Read Viable",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1445470867,
+          "mode": "list",
+          "cachedResultName": "Sponsor Lookup Review",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1445470867"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -112,
+        -192
+      ],
+      "id": "d68ec3c3-38a4-48e0-856b-708190333fea",
+      "name": "Read Lookup",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1788003007,
+          "mode": "list",
+          "cachedResultName": "Sponsor Entity Review Queue",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1788003007"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -112,
+        96
+      ],
+      "id": "8efe286c-d7a0-42cd-a00a-fb925db0f157",
+      "name": "Read Sponsor",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1943415705,
+          "mode": "list",
+          "cachedResultName": "No H-1B History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1943415705"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -112,
+        272
+      ],
+      "id": "37a5c580-1caa-404a-a49f-7eb06e7178b0",
+      "name": "Read No H-1B",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nfunction asRows(nodeName) {\n  try {\n    return $(nodeName).all().map((item) => item.json);\n  } catch (error) {\n    return [];\n  }\n}\n\nfunction isRealRow(row) {\n  return text(row['Job ID']) && text(row['Timestamp']);\n}\n\nfunction inLast24Hours(row) {\n  const ts = Date.parse(row['Timestamp']);\n  if (!Number.isFinite(ts)) return false;\n  return Date.now() - ts <= 24 * 60 * 60 * 1000;\n}\n\nfunction line(row) {\n  const company = text(row['Company Identity']) || 'Unknown company';\n  const title = text(row['Job Title']) || 'Untitled';\n  const url = text(row['Apply URL']);\n  const petitioner = text(row['Verified Sponsor Entity Name']);\n  const extra = petitioner ? ` — petitioner: ${petitioner}` : '';\n  const link = url ? ` — ${url}` : '';\n  return `• ${company} — ${title}${extra}${link}`;\n}\n\nfunction section(title, rows) {\n  const body = rows.length ? rows.map(line).join('\\n') : '• (none in the last 24 hours)';\n  return `${title} (${rows.length})\\n${body}`;\n}\n\nconst viable = asRows('Read Viable').filter(isRealRow).filter(inLast24Hours);\nconst lookup = asRows('Read Lookup').filter(isRealRow).filter(inLast24Hours);\nconst sponsor = asRows('Read Sponsor').filter(isRealRow).filter(inLast24Hours);\nconst noH1b = asRows('Read No H-1B').filter(isRealRow).filter(inLast24Hours);\n\nconst textBody = [\n  section('VIABLE JOBS — apply from these', viable),\n  '',\n  section('SPONSOR LOOKUP REVIEW — MyVisaJobs miss; not a discard', lookup),\n  '',\n  section('SPONSOR ENTITY REVIEW — need a petitioner (do not treat as apply-ready)', sponsor),\n  '',\n  section('NO H-1B HISTORY — do not apply', noH1b),\n].join('\\n');\n\nconst subject =\n  `Job search — ${viable.length} viable / ${lookup.length} lookup / ${sponsor.length} review / ${noH1b.length} no-H1B`;\n\nreturn [{ json: { subject, textBody, viableCount: viable.length, lookupCount: lookup.length, sponsorCount: sponsor.length, noH1bCount: noH1b.length } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        -32
+      ],
+      "id": "116ec8f9-e3e2-4061-8126-517b36dd0cf6",
+      "name": "Build Digest Email"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        192,
+        -64
+      ],
+      "id": "19d633ac-d453-4fab-b5e0-dd5055e7cbd7",
+      "name": "Merge",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "sendTo": "almeechristian53@gmail.com",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.textBody.replaceAll('\\n', '<br>\\n') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        608,
+        -32
+      ],
+      "id": "345428c1-addc-4e5f-9658-2337d3a51674",
+      "name": "Send Digest",
+      "webhookId": "d07c6ab1-bf4c-4353-be5f-4d1230329a0d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "7IclOM354T9nKp9Z",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n-automation",
+  "repo_owner": "Almee98",
+  "repo_path": "workflows/",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-16T22:25:26.660Z",
+      "createdAt": "2026-09-16T22:25:26.660Z",
+      "role": "workflow:owner",
+      "workflowId": "U0YZqqtlX8L3vOqB",
+      "projectId": "6vvj3dOnaSovrQI9"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-09-16T22:56:34.924Z",
+  "versionId": "3ed6aa0d-e9d7-4617-a9bb-978ac83defe7"
+}
