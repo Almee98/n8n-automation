@@ -7,7 +7,7 @@
       "main": [
         [
           {
-            "node": "Edit Fields",
+            "node": "Get row(s) in sheet",
             "type": "main",
             "index": 0
           }
@@ -480,20 +480,30 @@
     },
     "Map Apify Jobs": {
       "main": [
+        []
+      ]
+    },
+    "Fetch HiringCafe Jobs (Apify)": {
+      "main": [
+        []
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
         [
           {
-            "node": "Normalize Description",
+            "node": "Shape Hand-Fed Job",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Fetch HiringCafe Jobs (Apify)": {
+    "Shape Hand-Fed Job": {
       "main": [
         [
           {
-            "node": "Map Apify Jobs",
+            "node": "Normalize Description",
             "type": "main",
             "index": 0
           }
@@ -515,8 +525,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        752,
-        -256
+        1104,
+        -272
       ],
       "id": "7b2d9dec-f506-4ed2-af82-4d3d22c80871",
       "name": "When clicking ‘Execute workflow’"
@@ -2501,8 +2511,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        976,
-        -256
+        1616,
+        272
       ],
       "id": "36a15bf8-b859-4890-a741-31c1dfb94060",
       "name": "Edit Fields"
@@ -2514,8 +2524,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1456,
-        -256
+        1408,
+        256
       ],
       "id": "848735f3-38b8-4f6f-90d2-0ebf3c3490bf",
       "name": "Map Apify Jobs"
@@ -2545,8 +2555,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1248,
-        -256
+        1888,
+        272
       ],
       "id": "02373d93-3e9d-477b-bdeb-4c8aa335a5ef",
       "name": "Fetch HiringCafe Jobs (Apify)",
@@ -2556,6 +2566,53 @@
           "name": "Bearer Auth account"
         }
       }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1167965880,
+          "mode": "list",
+          "cachedResultName": "Hand Feed Inbox",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1167965880"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1280,
+        -272
+      ],
+      "id": "ef64c454-eee6-4c07-8bf6-fbd84edc926d",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nfunction first(row, keys) {\n  for (const key of keys) {\n    const value = text(row[key]);\n    if (value) return value;\n  }\n  return '';\n}\n\nreturn $input.all().flatMap((item) => {\n  const row = item.json;\n  const title = first(row, ['Title', 'title']);\n  const applyUrl = first(row, ['Apply URL', 'apply_url']);\n  const description = first(row, ['Description', 'description']);\n  const companyName = first(row, ['Company Name', 'company_name']);\n\n  if (!applyUrl && !description) return [];\n  if (!applyUrl) throw new Error('Row missing Apply URL');\n  if (!description) throw new Error(`Paste the full JD for ${applyUrl}`);\n\n  let id = first(row, ['Job ID', 'id']);\n  if (!id) {\n    const host = applyUrl.replace(/^https?:\\/\\//i, '').split('/')[0].replace(/^www\\./, '');\n    const slug = applyUrl.replace(/[^a-zA-Z0-9]+/g, '_').slice(0, 80);\n    id = `manual___${host}___${slug}`;\n  }\n\n  const job_information = { title, description };\n\n  return [{\n    json: {\n      id,\n      apply_url: applyUrl,\n      source: 'manual',\n      company_name: companyName,\n      job_information,\n      job: { job_information },\n      v5_processed_job_data: {\n        company_name: companyName,\n        core_job_title: title,\n      },\n    },\n  }];\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1456,
+        -272
+      ],
+      "id": "19f2dd0c-fab1-47b7-9b6a-e274589aa367",
+      "name": "Shape Hand-Fed Job"
     }
   ],
   "pinData": {},
@@ -2579,6 +2636,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-09-16T03:34:06.412Z",
-  "versionId": "a8e30c56-e0be-4cbc-93a4-f179b2aaf0ab"
+  "updatedAt": "2026-10-09T20:00:49.247Z",
+  "versionId": "32c15a47-0c11-4225-a209-db7763f2e71c"
 }
