@@ -1084,21 +1084,6 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2192,
-        -400
-      ],
-      "id": "8d481726-0db3-4302-a571-ceacf9c70275",
-      "name": "Sticky Note"
-    },
-    {
-      "parameters": {
-        "content": "Discard this job.",
-        "height": 80,
-        "width": 160
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
         8544,
         -336
       ],
@@ -1305,15 +1290,15 @@
           "mappingMode": "defineBelow",
           "value": {
             "Timestamp": "={{ $now }}",
-            "Job ID": "={{ $('Limit').item.json.id }}",
-            "Job Title": "={{ $('Limit').item.json.job_information.title }}",
+            "Job ID": "={{ $json.id }}",
+            "Job Title": "={{ $json.job_information.title }}",
             "Identity Basis": "={{ $json.company_identity.identityBasis }}",
             "Confidence": "={{ $json.company_identity.confidence }}",
             "Manual Review Reason": "={{ $json.company_identity.manualReviewReason }}",
             "Evidence": "={{ $json.company_identity.evidence.join('\\n') }}",
-            "Apply URL": "={{ $('Limit').item.json.apply_url }}",
+            "Apply URL": "={{ $json.apply_url }}",
             "Review Status": "Pending",
-            "Raw Source Company Name": "={{ $('Limit').item.json.enriched_company_data?.name ?? $('Limit').item.json.v5_processed_job_data?.company_name ?? $('Limit').item.json.company_name ?? '' }}",
+            "Raw Source Company Name": "={{ $json.enriched_company_data?.name ?? $json.v5_processed_job_data?.company_name ?? $json.company_name ?? '' }}",
             "Explicit Company Name": "={{ $json.company_identity.explicitCompanyName }}",
             "AI Recommended Company Name": "={{ $json.company_identity.recommendedCompanyName }}"
           },
@@ -2636,6 +2621,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-10-09T20:00:49.247Z",
-  "versionId": "32c15a47-0c11-4225-a209-db7763f2e71c"
+  "updatedAt": "2026-10-12T20:58:35.839Z",
+  "versionId": "ed09f0f1-ca9b-4d56-8a97-3e0397f6f653"
 }
