@@ -18,7 +18,7 @@
       "main": [
         [
           {
-            "node": "Deduplicate By Company Identity",
+            "node": "Group Listing URLs",
             "type": "main",
             "index": 0
           }
@@ -231,6 +231,126 @@
         [
           {
             "node": "Canonical Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Group Listing URLs": {
+      "main": [
+        [
+          {
+            "node": "Route Listing URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Listing URL": {
+      "main": [
+        [
+          {
+            "node": "Fetch Sponsor Listing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Sponsor Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Sponsor Listing": {
+      "main": [
+        [
+          {
+            "node": "Parse Listing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Sponsor Search": {
+      "main": [
+        [
+          {
+            "node": "Search MyVisaJobs Employer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search MyVisaJobs Employer": {
+      "main": [
+        [
+          {
+            "node": "Parse Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Listing": {
+      "main": [
+        [
+          {
+            "node": "Classify Sponsor History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Search": {
+      "main": [
+        [
+          {
+            "node": "Classify Sponsor History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify Sponsor History": {
+      "main": [
+        [
+          {
+            "node": "Sponsor Route History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sponsor Route History": {
+      "main": [
+        [
+          {
+            "node": "Write Viable Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Write No H-1B Job",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Write Sponsor Lookup Review",
             "type": "main",
             "index": 0
           }
@@ -814,6 +934,752 @@
       ],
       "id": "456606c8-6ebb-42c7-897e-3c48382b23f8",
       "name": "Canonical Mapping"
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nfunction normalize(value) {\n  return text(value).toLowerCase();\n}\n\nfunction listingUrl(row) {\n  const raw = text(row['Mapping Evidence / Source']) || text(row['Notes']);\n  try {\n    const parsed = new URL(raw);\n    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;\n    const host = parsed.hostname.replace(/^www\\./, '').toLowerCase();\n\n    if (host === 'myvisajobs.com') {\n      if (parsed.pathname.toLowerCase().includes('search.aspx')) return null;\n      return parsed.href;\n    }\n\n    if (host === 'h1bgrader.com' && parsed.pathname.toLowerCase().startsWith('/h1b-sponsors/')) {\n      return parsed.href;\n    }\n\n    return null;\n  } catch (error) {\n    return null;\n  }\n}\n\nconst rows = $input.all().map((item) => item.json);\nconst byCompany = new Map();\n\nfor (const row of rows) {\n  const key = normalize(row['Company Identity']);\n  if (!key) continue;\n  const list = byCompany.get(key) ?? [];\n  list.push(row);\n  byCompany.set(key, list);\n}\n\nconst output = [];\n\nfor (const [companyKey, companyRows] of byCompany) {\n  const urls = [...new Set(companyRows.map(listingUrl).filter(Boolean))];\n  const names = [...new Set(\n    companyRows.map((row) => text(row['Verified Sponsor Entity Name'])).filter(Boolean)\n  )];\n\n  const listing = urls[0] ?? null;\n\n  output.push({\n    json: {\n      route: listing ? 'listing' : 'search',\n      companyKey,\n      listingUrl: listing,\n      sponsorSearchTerm: names[0] ?? null,\n      jobs: companyRows,\n    },\n  });\n}\n\nreturn output;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        64
+      ],
+      "id": "0ff9cd66-c1c0-4c74-9dfe-026185b7f0f0",
+      "name": "Group Listing URLs"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "listing",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "f11391b7-a72b-477e-a8c4-131e585d8eb1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "listing"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c1f1c237-d281-46e3-999f-b733111a3189",
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "search",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "search"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        64
+      ],
+      "id": "0f1a482f-6e82-4934-b4e0-5d9b94f8ff01",
+      "name": "Route Listing URL",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "url": "=={{ $json.listingUrl }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        928,
+        64
+      ],
+      "id": "e9f37058-9b97-4e66-89e5-2bb54a7220fc",
+      "name": "Fetch Sponsor Listing"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = String($json.data ?? '');\nconst group = $('Group Listing URLs').item.json;\n\nconst text = html\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, ' ')\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, ' ')\n  .replace(/<[^>]+>/g, ' ')\n  .replace(/&nbsp;/gi, ' ')\n  .replace(/&amp;/gi, '&')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\nconst listing = new URL(group.listingUrl);\nconst host = listing.hostname.replace(/^www\\./, '').toLowerCase();\n\nfunction jobItems(lookup, sponsorEntity) {\n  return group.jobs.map((row) => ({\n    json: {\n      id: row['Job ID'],\n      title: row['Job Title'],\n      applyUrl: row['Apply URL'],\n      company: row['Company Identity'],\n      sponsor_entity: {\n        legal_name: row['Verified Sponsor Entity Name'],\n        myvisajobs_name: row['Verified Sponsor Entity Name'],\n        myvisajobs_path: sponsorEntity.myvisajobs_path,\n      },\n      sponsor_lookup: {\n        searchTerm: null,\n        listingUrl: group.listingUrl,\n        found: lookup.found,\n        resultCount: lookup.found ? 1 : 0,\n        employerName: row['Verified Sponsor Entity Name'] || null,\n        employerPath: lookup.employerPath,\n        visaRank: lookup.visaRank,\n        h1bDeniedOrWithdrawn: null,\n        h1bTotalApplications: lookup.h1bTotalApplications,\n        greenCardDeniedOrWithdrawn: null,\n        greenCardTotalApplications: null,\n      },\n    },\n  }));\n}\n\nif (host === 'h1bgrader.com') {\n  const section = text.match(\n    /H1B LCA Approvals,\\s*Denials\\s+Fiscal Year\\*?\\s+Certified\\s+Certified Withd\\.?\\s+Withdrawn\\s+Denied\\s+([\\s\\S]*?)\\s+H1B LCA Approval/i\n  );\n\n  const rows = [];\n  if (section) {\n    const rowRe = /(20\\d{2})\\s+(\\d+|-)\\s+(\\d+|-)\\s+(\\d+|-)\\s+(\\d+|-)/g;\n    let match;\n    while ((match = rowRe.exec(section[1])) !== null) {\n      rows.push({\n        year: Number(match[1]),\n        certified: match[2] === '-' ? null : Number(match[2]),\n      });\n    }\n  }\n\n  const positive = rows.filter((row) => row.certified > 0);\n  const allZero = rows.length > 0 && rows.every((row) => row.certified === 0);\n\n  let h1bTotalApplications = null;\n  if (positive.length > 0) {\n    const latest = rows[0];\n    h1bTotalApplications = latest.certified > 0 ? latest.certified : positive[0].certified;\n  } else if (allZero) {\n    h1bTotalApplications = 0;\n  }\n\n  return jobItems(\n    {\n      found: h1bTotalApplications !== null,\n      employerPath: group.listingUrl,\n      visaRank: null,\n      h1bTotalApplications,\n    },\n    { myvisajobs_path: null }\n  );\n}\n\nconst lcaMatch = text.match(/LCA for H-1B:\\s*(\\d+)/i);\nconst visaRankMatch = text.match(/Visa Rank:\\s*(\\d+)/i);\nconst noCurrentPetitions =\n  /No petitions/i.test(text) ||\n  /did not file any labor petitions for H-1B/i.test(text);\n\nconst h1bTotalApplications = lcaMatch\n  ? Number(lcaMatch[1])\n  : noCurrentPetitions\n    ? 0\n    : null;\n\nconst listingPath = listing.pathname.replace(/\\/$/, '');\n\nreturn jobItems(\n  {\n    found: h1bTotalApplications !== null,\n    employerPath: listingPath,\n    visaRank: visaRankMatch ? Number(visaRankMatch[1]) : null,\n    h1bTotalApplications,\n  },\n  { myvisajobs_path: listingPath }\n);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1136,
+        64
+      ],
+      "id": "37116c46-cb7f-4f65-bcfd-b414133c22bb",
+      "name": "Parse Listing"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        976,
+        208
+      ],
+      "id": "eee56093-a272-463b-8ad0-502296b96f32",
+      "name": "Prepare Sponsor Search"
+    },
+    {
+      "parameters": {
+        "url": "==https://www.myvisajobs.com/employers/search.aspx?e={{ encodeURIComponent($json.sponsorSearchTerm) }}&jt=",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1184,
+        208
+      ],
+      "id": "3261a221-6a18-4d51-b095-f577cb36f46d",
+      "name": "Search MyVisaJobs Employer"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = String($json.data ?? '');\nconst group = $('Prepare Sponsor Search').item.json;\n\nconst noResults = /returns\\s+no\\s+results/i.test(html);\nconst rowRegex =\n  /<tr>\\s*<td>1<\\/td>\\s*<td>(.*?)<\\/td>\\s*<td[^>]*>\\s*<a\\s+href=['\"]([^'\"]+)['\"][^>]*>(.*?)<\\/td>\\s*<td>(.*?)<\\/td>\\s*<td>(.*?)<\\/td>\\s*<\\/tr>/is;\nconst match = html.match(rowRegex);\n\nfunction clean(value) {\n  return String(value ?? '')\n    .replace(/<[^>]+>/g, '')\n    .replace(/&nbsp;/gi, ' ')\n    .replace(/&amp;/gi, '&')\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\n\nlet sponsorLookup = {\n  searchTerm: group.sponsorSearchTerm ?? '',\n  listingUrl: null,\n  found: false,\n  resultCount: 0,\n  employerName: null,\n  employerPath: null,\n  visaRank: null,\n  h1bDeniedOrWithdrawn: null,\n  h1bTotalApplications: null,\n  greenCardDeniedOrWithdrawn: null,\n  greenCardTotalApplications: null,\n};\n\nif (!noResults && match) {\n  const visaRank = clean(match[1]);\n  const employerPath = clean(match[2]);\n  const employerName = clean(match[3]);\n  const h1b = clean(match[4]).match(/(\\d+)\\s*\\/\\s*(\\d+)/);\n  const greenCard = clean(match[5]).match(/(\\d+)\\s*\\/\\s*(\\d+)/);\n\n  sponsorLookup = {\n    ...sponsorLookup,\n    found: true,\n    resultCount: 1,\n    employerName,\n    employerPath,\n    visaRank: visaRank === '-' ? null : Number(visaRank),\n    h1bDeniedOrWithdrawn: h1b ? Number(h1b[1]) : null,\n    h1bTotalApplications: h1b ? Number(h1b[2]) : null,\n    greenCardDeniedOrWithdrawn: greenCard ? Number(greenCard[1]) : null,\n    greenCardTotalApplications: greenCard ? Number(greenCard[2]) : null,\n  };\n}\n\nreturn group.jobs.map((row) => ({\n  json: {\n    id: row['Job ID'],\n    title: row['Job Title'],\n    applyUrl: row['Apply URL'],\n    company: row['Company Identity'],\n    sponsorSearchTerm: group.sponsorSearchTerm,\n    sponsor_entity: {\n      legal_name: group.sponsorSearchTerm,\n      myvisajobs_name: group.sponsorSearchTerm,\n      myvisajobs_path: sponsorLookup.employerPath,\n    },\n    sponsor_lookup: sponsorLookup,\n  },\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1392,
+        208
+      ],
+      "id": "0103a5c9-646b-48d0-bdc3-ef2c5a378b0b",
+      "name": "Parse Search"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const lookup = $json.sponsor_lookup ?? {};\n\nlet sponsorHistoryStatus;\n\nif (!lookup.found) {\n  sponsorHistoryStatus = 'LOOKUP_UNRESOLVED';\n} else if (\n  Number.isFinite(lookup.h1bTotalApplications) &&\n  lookup.h1bTotalApplications > 0\n) {\n  sponsorHistoryStatus = 'HAS_H1B_HISTORY';\n} else if (\n  Number.isFinite(lookup.h1bTotalApplications) &&\n  lookup.h1bTotalApplications === 0\n) {\n  sponsorHistoryStatus = 'NO_H1B_HISTORY_FOUND';\n} else {\n  sponsorHistoryStatus = 'LOOKUP_UNRESOLVED';\n}\n\nreturn {\n  json: {\n    ...$json,\n\n    sponsor_history: {\n      status: sponsorHistoryStatus,\n      hasRecentH1BHistory:\n        sponsorHistoryStatus === 'HAS_H1B_HISTORY',\n\n      h1bTotalApplications:\n        lookup.h1bTotalApplications ?? null,\n\n      h1bDeniedOrWithdrawn:\n        lookup.h1bDeniedOrWithdrawn ?? null,\n\n      visaRank:\n        lookup.visaRank ?? null,\n\n      matchedEmployer:\n        lookup.employerName ?? null,\n    },\n  },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        144
+      ],
+      "id": "78b868cc-f02d-4fbb-8893-5b73e35d3d3e",
+      "name": "Classify Sponsor History"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.sponsor_history.status }}",
+                    "rightValue": "HAS_H1B_HISTORY",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "8a79d36f-c1fb-4caa-a8b3-3761ecbd0125"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Has H-1B History"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "40531c5b-7dd0-4913-91e6-1760b392063b",
+                    "leftValue": "={{ $json.sponsor_history.status }}",
+                    "rightValue": "NO_H1B_HISTORY_FOUND",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "No H-1B History"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "330f257f-e501-4b0e-a8ca-be54df2cd90d",
+                    "leftValue": "={{ $json.sponsor_history.status }}",
+                    "rightValue": "LOOKUP_UNRESOLVED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Lookup Review"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": 2
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1840,
+        128
+      ],
+      "id": "0e28e400-5336-4edb-b6f3-c33e6cdbde29",
+      "name": "Sponsor Route History"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 302849126,
+          "mode": "list",
+          "cachedResultName": "Viable Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=302849126"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Job ID": "={{ $json.id }}",
+            "Job Title": "={{ $json.title }}",
+            "Apply URL": "={{ $json.applyUrl }}",
+            "Company Identity": "={{ $json.company }}",
+            "Verified Sponsor Entity Name": "={{ $json.sponsor_entity?.myvisajobs_name ?? $json.sponsor_entity?.legal_name ?? '' }}",
+            "Matched Employer": "={{ $json.sponsor_history?.matchedEmployer ?? $json.sponsor_lookup?.employerName ?? '' }}",
+            "H-1B Applications": "={{ $json.sponsor_history?.h1bTotalApplications ?? $json.sponsor_lookup?.h1bTotalApplications ?? '' }}",
+            "Visa Rank": "={{ $json.sponsor_history?.visaRank ?? $json.sponsor_lookup?.visaRank ?? '' }}",
+            "Sponsor Search Term": "={{ $json.sponsorSearchTerm ?? '' }}",
+            "MyVisaJobs Path": "={{ $json.sponsor_lookup?.employerPath ?? $json.sponsor_entity?.myvisajobs_path ?? '' }}",
+            "Status": "={{ $json.sponsor_history?.status ?? '' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply URL",
+              "displayName": "Apply URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Identity",
+              "displayName": "Company Identity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Verified Sponsor Entity Name",
+              "displayName": "Verified Sponsor Entity Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Matched Employer",
+              "displayName": "Matched Employer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "H-1B Applications",
+              "displayName": "H-1B Applications",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Visa Rank",
+              "displayName": "Visa Rank",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sponsor Search Term",
+              "displayName": "Sponsor Search Term",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "MyVisaJobs Path",
+              "displayName": "MyVisaJobs Path",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2064,
+        112
+      ],
+      "id": "3345a958-5953-49e7-a838-7e47024a11bb",
+      "name": "Write Viable Jobs",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1943415705,
+          "mode": "list",
+          "cachedResultName": "No H-1B History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1943415705"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Job ID": "={{ $json.id }}",
+            "Job Title": "={{ $json.title }}",
+            "Apply URL": "={{ $json.applyUrl }}",
+            "Company Identity": "={{ $json.company }}",
+            "Verified Sponsor Entity Name": "={{ $json.sponsor_entity?.myvisajobs_name ?? $json.sponsor_entity?.legal_name ?? '' }}",
+            "Matched Employer": "={{ $json.sponsor_history?.matchedEmployer ?? $json.sponsor_lookup?.employerName ?? '' }}",
+            "H-1B Applications": "={{ $json.sponsor_history?.h1bTotalApplications ?? $json.sponsor_lookup?.h1bTotalApplications ?? '' }}",
+            "Visa Rank": "={{ $json.sponsor_history?.visaRank ?? $json.sponsor_lookup?.visaRank ?? '' }}",
+            "Sponsor Search Term": "={{ $json.sponsorSearchTerm ?? '' }}",
+            "MyVisaJobs Path": "={{ $json.sponsor_lookup?.employerPath ?? $json.sponsor_entity?.myvisajobs_path ?? '' }}",
+            "Status": "={{ $json.sponsor_history?.status ?? '' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply URL",
+              "displayName": "Apply URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Identity",
+              "displayName": "Company Identity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Verified Sponsor Entity Name",
+              "displayName": "Verified Sponsor Entity Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Matched Employer",
+              "displayName": "Matched Employer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "H-1B Applications",
+              "displayName": "H-1B Applications",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Visa Rank",
+              "displayName": "Visa Rank",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sponsor Search Term",
+              "displayName": "Sponsor Search Term",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "MyVisaJobs Path",
+              "displayName": "MyVisaJobs Path",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2048,
+        272
+      ],
+      "id": "c55a7601-5268-46f0-b815-b753ac46a53f",
+      "name": "Write No H-1B Job",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1445470867,
+          "mode": "list",
+          "cachedResultName": "Sponsor Lookup Review",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1445470867"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Job ID": "={{ $json.id }}",
+            "Job Title": "={{ $json.title }}",
+            "Apply URL": "={{ $json.applyUrl }}",
+            "Company Identity": "={{ $json.company }}",
+            "Verified Sponsor Entity Name": "={{ $json.sponsor_entity?.myvisajobs_name ?? $json.sponsor_entity?.legal_name ?? '' }}",
+            "Matched Employer": "={{ $json.sponsor_history?.matchedEmployer ?? $json.sponsor_lookup?.employerName ?? '' }}",
+            "H-1B Applications": "={{ $json.sponsor_history?.h1bTotalApplications ?? $json.sponsor_lookup?.h1bTotalApplications ?? '' }}",
+            "Visa Rank": "={{ $json.sponsor_history?.visaRank ?? $json.sponsor_lookup?.visaRank ?? '' }}",
+            "Sponsor Search Term": "={{ $json.sponsorSearchTerm ?? '' }}",
+            "MyVisaJobs Path": "={{ $json.sponsor_lookup?.employerPath ?? $json.sponsor_entity?.myvisajobs_path ?? '' }}",
+            "Status": "={{ $json.sponsor_history?.status ?? '' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job ID",
+              "displayName": "Job ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apply URL",
+              "displayName": "Apply URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Identity",
+              "displayName": "Company Identity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Verified Sponsor Entity Name",
+              "displayName": "Verified Sponsor Entity Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Matched Employer",
+              "displayName": "Matched Employer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "H-1B Applications",
+              "displayName": "H-1B Applications",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Visa Rank",
+              "displayName": "Visa Rank",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sponsor Search Term",
+              "displayName": "Sponsor Search Term",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "MyVisaJobs Path",
+              "displayName": "MyVisaJobs Path",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2048,
+        400
+      ],
+      "id": "ad399434-98ad-46f5-a189-be9f648d9646",
+      "name": "Write Sponsor Lookup Review",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -837,6 +1703,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-09-16T23:00:33.594Z",
-  "versionId": "f11bfe31-44b3-4a8b-8c77-f2f7d747dcd0"
+  "updatedAt": "2026-10-12T21:09:53.353Z",
+  "versionId": "f0686fa8-5e57-4ba6-aee3-13f0cb13bf1a"
 }
