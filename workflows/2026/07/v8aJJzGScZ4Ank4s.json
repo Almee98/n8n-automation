@@ -168,7 +168,7 @@
         ],
         [
           {
-            "node": "Manual Employer Review",
+            "node": "Read Sponsor Entity Review Queue",
             "type": "main",
             "index": 0
           }
@@ -526,6 +526,28 @@
         [
           {
             "node": "Write Viable Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Sponsor Entity Review Queue": {
+      "main": [
+        [
+          {
+            "node": "Keep Unwritten Sponsor Queue Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Unwritten Sponsor Queue Jobs": {
+      "main": [
+        [
+          {
+            "node": "Manual Employer Review",
             "type": "main",
             "index": 0
           }
@@ -1279,8 +1301,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        6736,
-        -288
+        7168,
+        -240
       ],
       "id": "30dfb21a-5f4a-4089-9128-fb60c5494410",
       "name": "Manual Employer Review",
@@ -2670,6 +2692,54 @@
       ],
       "id": "bc0d85a6-8790-43a9-9505-205a466ed921",
       "name": "Keep Unwritten Viable Jobs"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1788003007,
+          "mode": "list",
+          "cachedResultName": "Sponsor Entity Review Queue",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1788003007"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        6752,
+        -240
+      ],
+      "id": "2174f0c7-fca4-4214-8f93-a0e186c28af3",
+      "name": "Read Sponsor Entity Review Queue",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst existingIds = new Set(\n  $input.all()\n    .map((item) => text(item.json['Job ID']))\n    .filter(Boolean)\n);\n\nreturn $('Route Sponsor Entity Mapping').all(1)\n  .filter((item) => {\n    const id = text(item.json.id);\n    return id && !existingIds.has(id);\n  })\n  .map((item) => ({ json: item.json }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6960,
+        -240
+      ],
+      "id": "e9cdd21e-e6b4-4316-ba86-280d39071656",
+      "name": "Keep Unwritten Sponsor Queue Jobs"
     }
   ],
   "pinData": {},
@@ -2693,6 +2763,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-10-13T03:03:34.730Z",
-  "versionId": "00276b76-468a-4770-8f63-b44dbae6c2ad"
+  "updatedAt": "2026-10-13T13:47:27.215Z",
+  "versionId": "7bcfd1cb-8f43-46b0-b5bb-05565c13ca8b"
 }
