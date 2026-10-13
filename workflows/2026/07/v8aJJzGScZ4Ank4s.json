@@ -201,7 +201,7 @@
       "main": [
         [
           {
-            "node": "Write Viable Jobs",
+            "node": "Read Viable Jobs",
             "type": "main",
             "index": 0
           }
@@ -504,6 +504,28 @@
         [
           {
             "node": "Normalize Description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Viable Jobs": {
+      "main": [
+        [
+          {
+            "node": "Keep Unwritten Viable Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Unwritten Viable Jobs": {
+      "main": [
+        [
+          {
+            "node": "Write Viable Jobs",
             "type": "main",
             "index": 0
           }
@@ -2121,8 +2143,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        8384,
-        -624
+        8752,
+        -608
       ],
       "id": "48f9e83a-802a-4241-a94e-35a268f9cb69",
       "name": "Write Viable Jobs",
@@ -2598,6 +2620,56 @@
       ],
       "id": "19f2dd0c-fab1-47b7-9b6a-e274589aa367",
       "name": "Shape Hand-Fed Job"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 302849126,
+          "mode": "list",
+          "cachedResultName": "Viable Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=302849126"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        8384,
+        -608
+      ],
+      "id": "38b64dda-392b-4743-b80a-cbd86f06ff9d",
+      "name": "Read Viable Jobs",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst existingIds = new Set(\n  $input.all()\n    .map((item) => text(item.json['Job ID']))\n    .filter(Boolean)\n);\n\nreturn $('Sponsor Route History').all(0)\n  .filter((item) => {\n    const id = text(item.json.id);\n    return id && !existingIds.has(id);\n  })\n  .map((item) => ({ json: item.json }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8576,
+        -608
+      ],
+      "id": "bc0d85a6-8790-43a9-9505-205a466ed921",
+      "name": "Keep Unwritten Viable Jobs"
     }
   ],
   "pinData": {},
@@ -2621,6 +2693,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-10-12T20:58:35.839Z",
-  "versionId": "ed09f0f1-ca9b-4d56-8a97-3e0397f6f653"
+  "updatedAt": "2026-10-13T03:03:34.730Z",
+  "versionId": "00276b76-468a-4770-8f63-b44dbae6c2ad"
 }
