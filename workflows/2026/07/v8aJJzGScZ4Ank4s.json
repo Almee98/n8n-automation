@@ -2702,6 +2702,7 @@
       "id": "38b64dda-392b-4743-b80a-cbd86f06ff9d",
       "name": "Read Viable Jobs",
       "alwaysOutputData": true,
+      "executeOnce": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "biSHvFkUNE3Sct76",
@@ -2811,6 +2812,8 @@
       ],
       "id": "7af52edf-01a4-4c54-8a72-208c9fb55b32",
       "name": "Read No H-1B History",
+      "alwaysOutputData": true,
+      "executeOnce": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "biSHvFkUNE3Sct76",
@@ -2857,6 +2860,8 @@
       ],
       "id": "4e7a70b9-00f7-43ba-9ae4-02f8275ae427",
       "name": "Read Lookup Review",
+      "alwaysOutputData": true,
+      "executeOnce": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "biSHvFkUNE3Sct76",
@@ -2899,6 +2904,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-10-13T15:40:50.643Z",
-  "versionId": "8aab81a4-6980-4362-b040-2806217a5560"
+  "updatedAt": "2026-10-13T16:00:53.400Z",
+  "versionId": "9f38ae2c-1a88-4b65-8f75-ce8ed26e4eb2"
 }
