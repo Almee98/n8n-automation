@@ -2820,7 +2820,7 @@
     },
     {
       "parameters": {
-        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst existingIds = new Set(\n  $input.all()\n    .map((item) => text(item.json['Job ID']))\n    .filter(Boolean)\n);\n\nreturn $('Sponsor Route History').all(0)\n  .filter((item) => {\n    const id = text(item.json.id);\n    return id && !existingIds.has(id);\n  })\n  .map((item) => ({ json: item.json }));"
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst existingIds = new Set(\n  $input.all()\n    .map((item) => text(item.json['Job ID']))\n    .filter(Boolean)\n);\n\nreturn $('Sponsor Route History').all(1)\n  .filter((item) => {\n    const id = text(item.json.id);\n    return id && !existingIds.has(id);\n  })\n  .map((item) => ({ json: item.json }));"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -2866,7 +2866,7 @@
     },
     {
       "parameters": {
-        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst existingIds = new Set(\n  $input.all()\n    .map((item) => text(item.json['Job ID']))\n    .filter(Boolean)\n);\n\nreturn $('Sponsor Route History').all(0)\n  .filter((item) => {\n    const id = text(item.json.id);\n    return id && !existingIds.has(id);\n  })\n  .map((item) => ({ json: item.json }));"
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst existingIds = new Set(\n  $input.all()\n    .map((item) => text(item.json['Job ID']))\n    .filter(Boolean)\n);\n\nreturn $('Sponsor Route History').all(2)\n  .filter((item) => {\n    const id = text(item.json.id);\n    return id && !existingIds.has(id);\n  })\n  .map((item) => ({ json: item.json }));"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -2899,6 +2899,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-10-13T15:37:47.830Z",
-  "versionId": "0acc527a-e4c0-4df2-9f16-92c4b3093abe"
+  "updatedAt": "2026-10-13T15:40:50.643Z",
+  "versionId": "8aab81a4-6980-4362-b040-2806217a5560"
 }
