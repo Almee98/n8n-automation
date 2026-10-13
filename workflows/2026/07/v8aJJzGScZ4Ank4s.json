@@ -208,14 +208,14 @@
         ],
         [
           {
-            "node": "Write No H-1B Job",
+            "node": "Read No H-1B History",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "Write Sponsor Lookup Review",
+            "node": "Read Lookup Review",
             "type": "main",
             "index": 0
           }
@@ -548,6 +548,50 @@
         [
           {
             "node": "Manual Employer Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read No H-1B History": {
+      "main": [
+        [
+          {
+            "node": "Keep Unwritten No H-1B History Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Lookup Review": {
+      "main": [
+        [
+          {
+            "node": "Keep Unwritten Lookup Review Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Unwritten No H-1B History Jobs": {
+      "main": [
+        [
+          {
+            "node": "Write No H-1B Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Unwritten Lookup Review Jobs": {
+      "main": [
+        [
+          {
+            "node": "Write Sponsor Lookup Review",
             "type": "main",
             "index": 0
           }
@@ -1118,21 +1162,6 @@
       ],
       "id": "e6542fa6-7c76-4340-ac55-7a698c16b685",
       "name": "Route Job Sponsorship Language"
-    },
-    {
-      "parameters": {
-        "content": "Discard this job.",
-        "height": 80,
-        "width": 160
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        8544,
-        -336
-      ],
-      "id": "06738918-bc29-481d-b0f4-7bf17fecd47f",
-      "name": "Sticky Note1"
     },
     {
       "parameters": {
@@ -2329,8 +2358,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        8368,
-        -464
+        8752,
+        -448
       ],
       "id": "0ee2ca13-b3df-4c25-8c8c-6f86a5c0671c",
       "name": "Write No H-1B Job",
@@ -2493,8 +2522,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        8368,
-        -336
+        8752,
+        -256
       ],
       "id": "7ca22769-0b18-4180-81e3-75a6f5b7c25e",
       "name": "Write Sponsor Lookup Review",
@@ -2740,6 +2769,113 @@
       ],
       "id": "e9cdd21e-e6b4-4316-ba86-280d39071656",
       "name": "Keep Unwritten Sponsor Queue Jobs"
+    },
+    {
+      "parameters": {
+        "content": "Discard this job.",
+        "height": 80,
+        "width": 160
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        9120,
+        -256
+      ],
+      "id": "06738918-bc29-481d-b0f4-7bf17fecd47f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1943415705,
+          "mode": "list",
+          "cachedResultName": "No H-1B History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1943415705"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        8384,
+        -448
+      ],
+      "id": "7af52edf-01a4-4c54-8a72-208c9fb55b32",
+      "name": "Read No H-1B History",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst existingIds = new Set(\n  $input.all()\n    .map((item) => text(item.json['Job ID']))\n    .filter(Boolean)\n);\n\nreturn $('Sponsor Route History').all(0)\n  .filter((item) => {\n    const id = text(item.json.id);\n    return id && !existingIds.has(id);\n  })\n  .map((item) => ({ json: item.json }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8576,
+        -448
+      ],
+      "id": "186084ee-cc8f-41b4-b1ed-226774cad463",
+      "name": "Keep Unwritten No H-1B History Jobs"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1445470867,
+          "mode": "list",
+          "cachedResultName": "Sponsor Lookup Review",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=1445470867"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        8384,
+        -256
+      ],
+      "id": "4e7a70b9-00f7-43ba-9ae4-02f8275ae427",
+      "name": "Read Lookup Review",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst existingIds = new Set(\n  $input.all()\n    .map((item) => text(item.json['Job ID']))\n    .filter(Boolean)\n);\n\nreturn $('Sponsor Route History').all(0)\n  .filter((item) => {\n    const id = text(item.json.id);\n    return id && !existingIds.has(id);\n  })\n  .map((item) => ({ json: item.json }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        8576,
+        -256
+      ],
+      "id": "d297e64e-f2b7-4393-9289-86e890bc4cb1",
+      "name": "Keep Unwritten Lookup Review Jobs"
     }
   ],
   "pinData": {},
@@ -2763,6 +2899,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-10-13T13:47:27.215Z",
-  "versionId": "7bcfd1cb-8f43-46b0-b5bb-05565c13ca8b"
+  "updatedAt": "2026-10-13T15:37:47.830Z",
+  "versionId": "0acc527a-e4c0-4df2-9f16-92c4b3093abe"
 }
