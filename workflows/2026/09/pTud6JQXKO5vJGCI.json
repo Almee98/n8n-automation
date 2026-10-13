@@ -405,6 +405,28 @@
           }
         ]
       ]
+    },
+    "Keep Unwritten No H-1B History Jobs": {
+      "main": [
+        [
+          {
+            "node": "Write No H-1B Job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Unwritten Lookup Review Jobs": {
+      "main": [
+        [
+          {
+            "node": "Write Sponsor Lookup Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-09-01T02:08:04.698Z",
@@ -1900,6 +1922,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-10-13T16:26:54.331Z",
-  "versionId": "8861d767-77ae-4f36-9157-9a0071b3344a"
+  "updatedAt": "2026-10-13T16:30:07.405Z",
+  "versionId": "18c0aa92-1bc8-4342-be11-9ea4199e4501"
 }
