@@ -608,7 +608,7 @@
     },
     {
       "parameters": {
-        "jsCode": "function getCompanyRows() {\n  try {\n    return $('Route Company Record').all(0, $runIndex);\n  } catch (error) {\n    return $('Route Company Record').all(0);\n  }\n}\n\nfunction text(value) {\n  return String(value ?? '').trim();\n}\n\nfunction normalize(value) {\n  return text(value).toLowerCase();\n}\n\nconst companyRows = getCompanyRows().map((item) => item.json);\n\nconst entityRows = $input.all()\n  .map((item) => item.json)\n  .filter((row) => row && row.id && row.legal_name);\n\nconst entitiesByName = new Map();\n\nfor (const entity of entityRows) {\n  const key = normalize(entity.legal_name);\n  const existing = entitiesByName.get(key) ?? [];\n  existing.push(entity);\n  entitiesByName.set(key, existing);\n}\n\nreturn companyRows.map((row) => {\n  const legalName = text(row['Verified Sponsor Entity Name']);\n  const matches = entitiesByName.get(normalize(legalName)) ?? [];\n\n  if (matches.length > 1) {\n    throw new Error(\n      `Ambiguous sponsor_entities for \"${legalName}\": ${matches.length} rows. Do not pick the first.`\n    );\n  }\n\n  const sponsorEntity = matches.length === 1 ? matches[0] : null;\n\n  return {\n    json: {\n      ...row,\n      sponsor_entity: sponsorEntity,\n      sponsor_entity_id: sponsorEntity?.id ?? null,\n      hasSponsorEntityRecord: Boolean(sponsorEntity),\n    },\n  };\n});"
+        "jsCode": "function getCompanyRows() {\n  try {\n    return $('Route Company Record').all(0, $runIndex);\n  } catch (error) {\n    return $('Route Company Record').all(0);\n  }\n}\n\nfunction text(value) {\n  return String(value ?? '').trim();\n}\n\nfunction normalize(value) {\n  return text(value).toLowerCase();\n}\n\nconst companyRows = getCompanyRows().map((item) => item.json);\n\nconst entityRows = $input.all()\n  .map((item) => item.json)\n  .filter((row) => row && row.id && row.legal_name);\n\nconst entitiesByName = new Map();\n\nfor (const entity of entityRows) {\n  const key = normalize(entity.legal_name);\n  const existing = entitiesByName.get(key) ?? [];\n  existing.push(entity);\n  entitiesByName.set(key, existing);\n}\n\nreturn companyRows.map((row) => {\n  const legalName = text(row['Verified Sponsor Entity Name']);\n  const matches = entitiesByName.get(normalize(legalName)) ?? [];\n  const distinct = [...new Map(matches.map((entity) => [entity.id, entity])).values()];\n\n  if (distinct.length > 1) {\n    throw new Error(\n      `Ambiguous sponsor_entities for \"${legalName}\": ${distinct.length} rows. Do not pick the first.`\n    );\n  }\n\n  const sponsorEntity = distinct.length === 1 ? distinct[0] : null;\n\n  return {\n    json: {\n      ...row,\n      sponsor_entity: sponsorEntity,\n      sponsor_entity_id: sponsorEntity?.id ?? null,\n      hasSponsorEntityRecord: Boolean(sponsorEntity),\n    },\n  };\n});"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -1780,6 +1780,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-10-13T03:03:14.668Z",
-  "versionId": "8be4a3ad-ed13-4a78-89fe-34c96749c8e5"
+  "updatedAt": "2026-10-13T13:03:13.150Z",
+  "versionId": "cdede6dd-f751-4d0c-bf2c-5e599cdd50ba"
 }
