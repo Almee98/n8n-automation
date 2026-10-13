@@ -1761,6 +1761,7 @@
       "id": "c95a858d-ce44-4420-a76d-ba3eaeeb0ff7",
       "name": "Read Viable Jobs",
       "alwaysOutputData": true,
+      "executeOnce": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "biSHvFkUNE3Sct76",
@@ -1899,6 +1900,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-10-13T16:01:43.794Z",
-  "versionId": "016f6508-ce74-444f-808d-6c7b8914a3cb"
+  "updatedAt": "2026-10-13T16:26:54.331Z",
+  "versionId": "8861d767-77ae-4f36-9157-9a0071b3344a"
 }
