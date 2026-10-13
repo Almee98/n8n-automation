@@ -21,6 +21,11 @@
             "node": "Group Listing URLs",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Deduplicate By Company Identity",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -336,7 +341,7 @@
       "main": [
         [
           {
-            "node": "Write Viable Jobs",
+            "node": "Read Viable Jobs",
             "type": "main",
             "index": 0
           }
@@ -351,6 +356,28 @@
         [
           {
             "node": "Write Sponsor Lookup Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Viable Jobs": {
+      "main": [
+        [
+          {
+            "node": "Keep Unwritten Viable Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Unwritten Viable Jobs": {
+      "main": [
+        [
+          {
+            "node": "Write Viable Jobs",
             "type": "main",
             "index": 0
           }
@@ -942,8 +969,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        512,
-        64
+        368,
+        144
       ],
       "id": "0ff9cd66-c1c0-4c74-9dfe-026185b7f0f0",
       "name": "Group Listing URLs"
@@ -1008,23 +1035,23 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        720,
-        64
+        576,
+        144
       ],
       "id": "0f1a482f-6e82-4934-b4e0-5d9b94f8ff01",
       "name": "Route Listing URL",
-      "alwaysOutputData": true
+      "alwaysOutputData": false
     },
     {
       "parameters": {
-        "url": "=={{ $json.listingUrl }}",
+        "url": "={{ $json.listingUrl }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        928,
-        64
+        784,
+        144
       ],
       "id": "e9f37058-9b97-4e66-89e5-2bb54a7220fc",
       "name": "Fetch Sponsor Listing"
@@ -1036,8 +1063,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1136,
-        64
+        992,
+        144
       ],
       "id": "37116c46-cb7f-4f65-bcfd-b414133c22bb",
       "name": "Parse Listing"
@@ -1049,22 +1076,22 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        976,
-        208
+        832,
+        288
       ],
       "id": "eee56093-a272-463b-8ad0-502296b96f32",
       "name": "Prepare Sponsor Search"
     },
     {
       "parameters": {
-        "url": "==https://www.myvisajobs.com/employers/search.aspx?e={{ encodeURIComponent($json.sponsorSearchTerm) }}&jt=",
+        "url": "=https://www.myvisajobs.com/employers/search.aspx?e={{ encodeURIComponent($json.sponsorSearchTerm) }}&jt=",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1184,
-        208
+        1040,
+        288
       ],
       "id": "3261a221-6a18-4d51-b095-f577cb36f46d",
       "name": "Search MyVisaJobs Employer"
@@ -1076,8 +1103,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1392,
-        208
+        1248,
+        288
       ],
       "id": "0103a5c9-646b-48d0-bdc3-ef2c5a378b0b",
       "name": "Parse Search"
@@ -1090,8 +1117,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1616,
-        144
+        1472,
+        224
       ],
       "id": "78b868cc-f02d-4fbb-8893-5b73e35d3d3e",
       "name": "Classify Sponsor History"
@@ -1183,8 +1210,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        1840,
-        128
+        1696,
+        208
       ],
       "id": "0e28e400-5336-4edb-b6f3-c33e6cdbde29",
       "name": "Sponsor Route History"
@@ -1341,7 +1368,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2064,
+        2272,
         112
       ],
       "id": "3345a958-5953-49e7-a838-7e47024a11bb",
@@ -1505,8 +1532,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2048,
-        272
+        1920,
+        304
       ],
       "id": "c55a7601-5268-46f0-b815-b753ac46a53f",
       "name": "Write No H-1B Job",
@@ -1669,8 +1696,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        2048,
-        400
+        1904,
+        480
       ],
       "id": "ad399434-98ad-46f5-a189-be9f648d9646",
       "name": "Write Sponsor Lookup Review",
@@ -1680,6 +1707,56 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s",
+          "mode": "list",
+          "cachedResultName": "Manual Review Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 302849126,
+          "mode": "list",
+          "cachedResultName": "Viable Jobs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VW-fFZMNuMa8Ri0HsFFGbj6IA77nw13lUm_fmfqu25s/edit#gid=302849126"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1920,
+        112
+      ],
+      "id": "c95a858d-ce44-4420-a76d-ba3eaeeb0ff7",
+      "name": "Read Viable Jobs",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "biSHvFkUNE3Sct76",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function text(value) {\n  return String(value ?? '').trim();\n}\n\nconst existingIds = new Set(\n  $input.all()\n    .map((item) => text(item.json['Job ID']))\n    .filter(Boolean)\n);\n\nreturn $('Sponsor Route History').all(0)\n  .filter((item) => {\n    const id = text(item.json.id);\n    return id && !existingIds.has(id);\n  })\n  .map((item) => ({ json: item.json }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2096,
+        112
+      ],
+      "id": "410001dc-a99e-43c4-ae03-ddc7c3000889",
+      "name": "Keep Unwritten Viable Jobs"
     }
   ],
   "pinData": {},
@@ -1703,6 +1780,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-10-12T21:09:53.353Z",
-  "versionId": "f0686fa8-5e57-4ba6-aee3-13f0cb13bf1a"
+  "updatedAt": "2026-10-13T03:03:14.668Z",
+  "versionId": "8be4a3ad-ed13-4a78-89fe-34c96749c8e5"
 }
